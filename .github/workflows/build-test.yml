@@ -1,0 +1,53 @@
+name: Build & Test
+
+on:
+  push:
+    branches-ignore:
+      - master
+      - staging
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: kango_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.x"
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: v1-npm-deps-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: v1-npm-deps-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build and lint
+        run: |
+          yarn build
+          yarn lint
+        env:
+          DATABASE_TYPE: postgres
+          DATABASE_URL: postgres://postgres:password@localhost:5432/kango_db
