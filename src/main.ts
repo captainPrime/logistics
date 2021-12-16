@@ -1,14 +1,31 @@
 import { ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './internal/errors';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const { SERVICE_PORT, SERVICE_ENV, SERVICE_NAME } = process.env;
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
 
+  app.setGlobalPrefix('/v1');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
-  await app.listen(3000);
+  app.disable('x-powered-by');
+
+  if (SERVICE_ENV != 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle(SERVICE_NAME.toUpperCase())
+      .setDescription('API specification')
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api-spec', app, document);
+  }
+
+  await app.listen(SERVICE_PORT);
+  // .then((s) => console.log('app running on port', s.address().port));
 }
 bootstrap();
