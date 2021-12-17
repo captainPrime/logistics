@@ -3,8 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env } from './config/env.keys';
 import * as controllers from './http/controllers';
-import { UserService } from './http/controllers/users/user.service';
+import { UserService } from './users/user.service';
 import { UserRepo } from './users/user.repo';
+import { Helper } from './internal/utils';
 
 @Module({
   imports: [
@@ -23,6 +24,6 @@ import { UserRepo } from './users/user.repo';
     TypeOrmModule.forFeature([UserRepo]),
   ],
   controllers: [...Object.values(controllers)],
-  providers: [UserService],
+  providers: [UserService, Helper],
 })
 export class AppModule {}
