@@ -6,21 +6,21 @@ export class User extends Model {
   /**
    * user's first name
    */
-  @Column()
-  first_name: string;
+  @Column({ nullable: true })
+  first_name?: string;
 
   /**
    * user's last name
    */
-  @Column()
-  last_name: string;
+  @Column({ nullable: true })
+  last_name?: string;
 
   /**
    * user's email address.
    * email address is tranaformed to lower case to avoid case sensitivity search
    */
-  @Column({ unique: true })
-  email_address: string;
+  @Column({ nullable: true })
+  email_address?: string;
 
   /**
    * user's phone number
@@ -33,15 +33,24 @@ export class User extends Model {
    * user's password hash
    */
   @Column()
-  password_hash: string;
+  account_type: ACCOUNT_TYPE;
 
   /**
    * transform case insensitive fields to lowercase
    */
   @BeforeInsert()
   transform_fields_to_lowercase() {
-    this.first_name = this.first_name.toLowerCase();
-    this.last_name = this.last_name.toLowerCase();
-    this.email_address = this.email_address.toLowerCase();
+    if (this.first_name) this.first_name = this.first_name.toLowerCase();
+
+    if (this.last_name) this.last_name = this.last_name.toLowerCase();
+
+    if (this.email_address)
+      this.email_address = this.email_address.toLowerCase();
   }
+}
+
+export enum ACCOUNT_TYPE {
+  USER = 'user',
+  HOPPER = 'hopper',
+  ADMIN = 'admin',
 }
