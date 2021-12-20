@@ -1,4 +1,8 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, Matches } from 'class-validator';
+import {
+  PHONE_NUMBER_REGEX,
+  PHONE_NUMBER_REGEX_ERROR,
+} from 'src/internal/constants';
 
 export class UserDTO {
   @IsNotEmpty()
@@ -12,8 +16,18 @@ export class UserDTO {
   email_address: string;
 
   @IsNotEmpty()
+  @Matches(PHONE_NUMBER_REGEX, { message: PHONE_NUMBER_REGEX_ERROR })
   phone_number: string;
+}
 
-  @IsNotEmpty()
-  password: string;
+export class UpdateUserDTO {
+  @IsOptional()
+  first_name?: string;
+
+  @IsOptional()
+  last_name?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email_address?: string;
 }

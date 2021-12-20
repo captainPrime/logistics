@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -26,6 +26,6 @@ async function bootstrap() {
   }
 
   await app.listen(SERVICE_PORT);
-  // .then((s) => console.log('app running on port', s.address().port));
+  Logger.log(`Application running on ${await app.getUrl()}`, 'Application');
 }
 bootstrap();

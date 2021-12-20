@@ -4,8 +4,16 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+
+export class UnauthorizedRequest extends UnauthorizedException {
+  constructor(message?: string) {
+    super(message ?? 'We could not find a session for your request');
+  }
+}
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -32,6 +40,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
           ? error['message']
           : error['message'][0];
     } else {
+      Logger.error(exception, 'SYSTEM ERROR');
+      console.log(exception);
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
       message = 'We are having system level issues. Do bear with us';
     }
