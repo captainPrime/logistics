@@ -7,7 +7,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/http/middlewares/auth';
 import { UnauthorizedRequest } from 'src/internal/errors';
 import { Helper } from 'src/internal/utils';
@@ -21,6 +21,7 @@ import {
 import { UpdateUserDTO, UserDTO } from './user.validator';
 
 @ApiTags('Users')
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('/users')
 export class UserController {
