@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './internal/errors';
 
 async function bootstrap() {
-  const { SERVICE_PORT, SERVICE_ENV, SERVICE_NAME } = process.env;
+  const { PORT, SERVICE_ENV, SERVICE_NAME } = process.env;
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const httpAdapter = app.get(HttpAdapterHost);
 
@@ -25,7 +25,7 @@ async function bootstrap() {
     SwaggerModule.setup('api-spec', app, document);
   }
 
-  await app.listen(SERVICE_PORT);
+  await app.listen(PORT);
   Logger.log(`Application running on ${await app.getUrl()}`, 'Application');
 }
 bootstrap();
