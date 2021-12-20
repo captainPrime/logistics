@@ -19,7 +19,7 @@ export class User extends Model {
    * user's email address.
    * email address is tranaformed to lower case to avoid case sensitivity search
    */
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   email_address?: string;
 
   /**
