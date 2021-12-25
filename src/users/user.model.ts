@@ -1,4 +1,5 @@
 import { BeforeInsert, Column, Entity } from 'typeorm';
+
 import { Model } from '../internal/model';
 
 @Entity({ name: 'users' })
@@ -30,7 +31,7 @@ export class User extends Model {
   phone_number: string;
 
   /**
-   * user's password hash
+   * type of user
    */
   @Column()
   account_type: ACCOUNT_TYPE;
@@ -53,4 +54,26 @@ export enum ACCOUNT_TYPE {
   USER = 'user',
   HOPPER = 'hopper',
   ADMIN = 'admin',
+}
+
+export interface FindUser {
+  /**
+   * user's email address
+   */
+  email_address?: string;
+
+  /**
+   * user's phone number
+   */
+  phone_number?: string;
+
+  /**
+   * user's first name
+   */
+  first_name?: string;
+
+  /**
+   * user's last name
+   */
+  last_name?: string;
 }
