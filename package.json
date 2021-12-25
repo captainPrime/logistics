@@ -15,7 +15,7 @@
     "migrate": "yarn typeorm migration:run",
     "migration:generate": "yarn typeorm migration:generate -- -n",
     "migration:create": "yarn typeorm migration:create -- -n ",
-    "revert-migration": "yarn typeorm migration:revert",
+    "migration:rollback": "yarn typeorm migration:revert",
     "migration:config": "dotenv ts-node scripts/generate_migration_file"
   },
   "dependencies": {

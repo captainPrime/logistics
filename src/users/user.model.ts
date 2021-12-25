@@ -1,4 +1,5 @@
 import { BeforeInsert, Column, Entity } from 'typeorm';
+
 import { Model } from '../internal/model';
 
 @Entity({ name: 'users' })
@@ -19,7 +20,7 @@ export class User extends Model {
    * user's email address.
    * email address is tranaformed to lower case to avoid case sensitivity search
    */
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   email_address?: string;
 
   /**

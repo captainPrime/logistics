@@ -1,9 +1,9 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class makeUserEmailAddressesUnique1640025545228
+export class makeUserEmailAddressesUnique1640423500297
   implements MigrationInterface
 {
-  name = 'makeUserEmailAddressesUnique1640025545228';
+  name = 'makeUserEmailAddressesUnique1640423500297';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
