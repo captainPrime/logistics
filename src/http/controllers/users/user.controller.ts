@@ -26,9 +26,9 @@ import { UpdateUserDTO, UserDTO } from './user.validator';
 @Controller('/users')
 export class UserController {
   constructor(
-    readonly userRepo: UserRepo,
-    readonly helper: Helper,
-    private sessions: SessionStore,
+    private readonly userRepo: UserRepo,
+    private readonly helper: Helper,
+    private readonly sessions: SessionStore,
   ) {}
 
   @Post('/')
@@ -37,7 +37,6 @@ export class UserController {
       payload.phone_number = this.helper.format_phone_number(
         payload.phone_number,
       );
-      console.log(payload);
       return await this.userRepo.create_user(payload);
     } catch (err) {
       if (err instanceof DuplicateUser) {

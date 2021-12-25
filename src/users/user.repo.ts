@@ -1,10 +1,11 @@
+import { ACCOUNT_TYPE, FindUser, User } from './user.model';
+import { EntityRepository, Repository } from 'typeorm';
 import {
   UpdateUserDTO,
   UserDTO,
 } from 'src/http/controllers/users/user.validator';
+
 import { DB_ERROR_CODES } from '../internal/db';
-import { EntityRepository, Repository } from 'typeorm';
-import { ACCOUNT_TYPE, User } from './user.model';
 
 @EntityRepository(User)
 export class UserRepo extends Repository<User> {
@@ -65,6 +66,38 @@ export class UserRepo extends Repository<User> {
     if (payload.email_address) user.email_address = payload.email_address;
 
     return await this.save(user);
+  }
+
+  async find_or_create_user(params: FindUser) {
+    let user: User;
+
+    if (params.email_address) {
+      user = await this.findOne({
+        where: { email_address: params.email_address },
+      });
+    } else if (params.phone_number) {
+      user = await this.findOne({
+        where: { phone_number: params.phone_number },
+      });
+    }
+
+    if (user) return user;
+
+    user = new User();
+    user.first_name = params.first_name ?? null;
+    user.last_name = params.last_name ?? null;
+    user.email_address = params.email_address ?? null;
+    user.phone_number = params.phone_number ?? null;
+    user.account_type = ACCOUNT_TYPE.USER;
+
+    try {
+      return await this.save(user);
+    } catch (err) {
+      if (err.code === DB_ERROR_CODES.DUPLICATE) {
+        throw new DuplicateUser();
+      }
+      throw err;
+    }
   }
 }
 

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# generate migration file
+yarn migration:config;
+
+#run migrations
+yarn migrate;
+
+#start application
+yarn start;
