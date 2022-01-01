@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/config/env.keys';
+import { Env } from '../config/env.keys';
+import { Injectable } from '@nestjs/common';
 import { Twilio } from 'twilio';
 
 /**
