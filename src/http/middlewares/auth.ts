@@ -1,6 +1,7 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { UnauthorizedRequest } from 'src/internal/errors';
-import { SessionStore } from 'src/sessions/sessions.store';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+
+import { SessionStore } from '../../sessions/sessions.store';
+import { UnauthorizedRequest } from '../../internal/errors';
 
 /**
  * Auth middleware, authenticates user to ensure

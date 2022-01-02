@@ -1,8 +1,8 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Helper } from 'src/internal/utils';
-import { Session } from 'src/sessions/session.model';
-import { SessionStore } from 'src/sessions/sessions.store';
+import { Helper } from '../../..//internal/utils';
+import { Session } from '../../../sessions/session.model';
+import { SessionStore } from '../../..//sessions/sessions.store';
 import { UserRepo } from '../../../users/user.repo';
 import { CreateSessionDTO } from './session.validator';
 

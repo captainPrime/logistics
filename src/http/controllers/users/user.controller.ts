@@ -8,11 +8,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/http/middlewares/auth';
-import { UnauthorizedRequest } from 'src/internal/errors';
-import { Helper } from 'src/internal/utils';
-import { KeyNotFound, SessionStore } from 'src/sessions/sessions.store';
-import { User } from 'src/users/user.model';
+import { AuthGuard } from '../../middlewares/';
+import { UnauthorizedRequest } from '../../../internal/errors';
+import { Helper } from '../../../internal/utils';
+import { KeyNotFound, SessionStore } from '../../../sessions/sessions.store';
+import { User } from '../../..//users/user.model';
 import {
   DuplicateUser,
   UserNotFound,
