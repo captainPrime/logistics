@@ -9,31 +9,7 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_DB: kango_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
+    
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
@@ -53,12 +29,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build, migrate files and test
+      - name: Build and lint files
         run: |
           yarn build
-          yarn migration:config
-          yarn migrate
-          yarn test
+          yarn lint
         env:
           DATABASE_TYPE: postgres
           DATABASE_URL: postgres://postgres:password@localhost:5432/kango_db
