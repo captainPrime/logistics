@@ -2,7 +2,7 @@ import { IsEmail, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 import {
   PHONE_NUMBER_REGEX,
   PHONE_NUMBER_REGEX_ERROR,
-} from '../../../internal/constants';
+} from '@app/internal/constants';
 
 export class UserDTO {
   @IsNotEmpty()

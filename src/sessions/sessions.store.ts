@@ -2,7 +2,7 @@ import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { createHmac } from 'crypto';
-import { Env } from '../config/env.keys';
+import { Env } from '@app/config/env.keys';
 
 Injectable();
 export class SessionStore {

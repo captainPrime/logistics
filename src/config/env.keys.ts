@@ -1,4 +1,5 @@
 export const Env = {
+  port: 'PORT',
   /**
    * Service metadata
    */
