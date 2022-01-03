@@ -7,7 +7,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Env } from './config/env.keys';
 import { Helper } from './internal/utils';
 import { SessionStore } from './sessions/';
-import { TransactionRepo } from './transactions/';
 import { TwilioService } from './internal/twilio';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepo } from './users/';
@@ -34,7 +33,7 @@ import { UserRepo } from './users/';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserRepo, TransactionRepo]),
+    TypeOrmModule.forFeature([UserRepo]),
   ],
   controllers: [...Object.values(controllers)],
   providers: [Helper, TwilioService, SessionStore],
