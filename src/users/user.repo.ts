@@ -3,9 +3,9 @@ import { EntityRepository, Repository } from 'typeorm';
 import {
   UpdateUserDTO,
   UserDTO,
-} from 'src/http/controllers/users/user.validator';
+} from '@app/http/controllers/users/user.validator';
 
-import { DB_ERROR_CODES } from '../internal/db';
+import { DB_ERROR_CODES } from '@app/internal/db';
 
 @EntityRepository(User)
 export class UserRepo extends Repository<User> {

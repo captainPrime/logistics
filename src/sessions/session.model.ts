@@ -1,4 +1,4 @@
-import { User } from 'src/users/';
+import { User } from '@app/users';
 
 export interface Session {
   /**

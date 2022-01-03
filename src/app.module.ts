@@ -10,10 +10,16 @@ import { SessionStore } from './sessions/';
 import { TwilioService } from './internal/twilio';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepo } from './users/';
+import { get_schema } from './internal/env';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      validationSchema: get_schema(),
+      validationOptions: {
+        abortEarly: true,
+      },
+    }),
     CacheModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

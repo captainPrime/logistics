@@ -8,12 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '../../middlewares/';
-import { UnauthorizedRequest } from '../../../internal/errors';
-import { Helper } from '../../../internal/utils';
-import { KeyNotFound, SessionStore } from '../../../sessions/';
-import { User } from '../../..//users/';
-import { DuplicateUser, UserNotFound, UserRepo } from '../../../users/';
+import { AuthGuard } from '@app/http/middlewares/';
+import { UnauthorizedRequest } from '@app/internal/errors';
+import { Helper } from '@app/internal/utils';
+import { KeyNotFound, SessionStore } from '@app/sessions';
+import { User } from '@app/users';
+import { DuplicateUser, UserNotFound, UserRepo } from '@app/users';
 import { UpdateUserDTO, UserDTO } from './user.validator';
 
 @ApiTags('Users')

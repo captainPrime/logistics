@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, Entity } from 'typeorm';
 
-import { Model } from '../internal/model';
+import { Model } from '@app/internal/model';
 
 @Entity({ name: 'users' })
 export class User extends Model {

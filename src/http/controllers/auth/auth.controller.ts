@@ -5,11 +5,11 @@ import {
   Injectable,
   Post,
 } from '@nestjs/common';
-import { Helper } from '../../../internal/utils';
+import { Helper } from '@app/internal/utils';
 import { SendCodeDTO, VerifyPhoneDTO } from './auth.validator';
-import { TwilioService } from '../../../internal/twilio';
-import { UserRepo } from '../../../users/';
-import { SessionStore, Session } from '../../../sessions/';
+import { TwilioService } from '@app/internal/twilio';
+import { UserRepo } from '@app/users';
+import { SessionStore, Session } from '@app/sessions';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')
