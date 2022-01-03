@@ -27,7 +27,7 @@ export class User extends Model {
    * user's phone number
    * phone number must already be formated in +234 format
    */
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   phone_number: string;
 
   /**

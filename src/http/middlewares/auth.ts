@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
-import { SessionStore } from '../../sessions/sessions.store';
+import { SessionStore } from '../../sessions/';
 import { UnauthorizedRequest } from '../../internal/errors';
 
 /**

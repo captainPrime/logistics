@@ -8,9 +8,8 @@ import {
 import { Helper } from '../../../internal/utils';
 import { SendCodeDTO, VerifyPhoneDTO } from './auth.validator';
 import { TwilioService } from '../../../internal/twilio';
-import { UserRepo } from '../../../users/user.repo';
-import { SessionStore } from '../../../sessions/sessions.store';
-import { Session } from '../../../sessions/session.model';
+import { UserRepo } from '../../../users/';
+import { SessionStore, Session } from '../../../sessions/';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')

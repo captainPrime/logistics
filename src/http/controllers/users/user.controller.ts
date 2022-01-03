@@ -11,13 +11,9 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '../../middlewares/';
 import { UnauthorizedRequest } from '../../../internal/errors';
 import { Helper } from '../../../internal/utils';
-import { KeyNotFound, SessionStore } from '../../../sessions/sessions.store';
-import { User } from '../../..//users/user.model';
-import {
-  DuplicateUser,
-  UserNotFound,
-  UserRepo,
-} from '../../../users/user.repo';
+import { KeyNotFound, SessionStore } from '../../../sessions/';
+import { User } from '../../..//users/';
+import { DuplicateUser, UserNotFound, UserRepo } from '../../../users/';
 import { UpdateUserDTO, UserDTO } from './user.validator';
 
 @ApiTags('Users')

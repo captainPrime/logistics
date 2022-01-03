@@ -1,13 +1,15 @@
+import * as controllers from './http/controllers';
+import * as redisStore from 'cache-manager-redis-store';
+
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as redisStore from 'cache-manager-redis-store';
-import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { Env } from './config/env.keys';
-import * as controllers from './http/controllers';
-import { UserRepo } from './users/user.repo';
 import { Helper } from './internal/utils';
+import { SessionStore } from './sessions/';
 import { TwilioService } from './internal/twilio';
-import { SessionStore } from './sessions/sessions.store';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserRepo } from './users/';
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { SessionStore } from './sessions/sessions.store';
       useFactory: (configService: ConfigService) => ({
         type: configService.get(Env.database_type),
         url: configService.get(Env.database_url),
-        entities: ['dist/**/*.entity{.ts,.js}'],
+        entities: ['dist/**/*.model{.ts,.js}'],
         autoLoadEntities: true,
         logging: false,
       }),
