@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 
 import { SessionStore } from '@app/sessions';
 import { UnauthorizedRequest } from '@app/internal/errors';
+import { User } from '@app/users';
 
 /**
  * Auth middleware, authenticates user to ensure
@@ -32,8 +33,10 @@ export class AuthGuard implements CanActivate {
         'We could not find a session for your request',
       );
     }
-
-    res.locals.session = session;
+    /**
+     * res.locals.session would contain the user in session
+     */
+    res.locals.session = JSON.parse(session as string) as User;
 
     return true;
   }
