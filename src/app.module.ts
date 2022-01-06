@@ -11,9 +11,16 @@ import { TwilioService } from './internal/twilio';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepo } from './users/';
 import { get_schema } from './internal/env';
+import { TransactionRepo } from './transactions';
+import { HttpModule } from '@nestjs/axios';
+import { HttpClient } from './internal/http';
+import { PaystackService } from './internal/paystack';
 
 @Module({
   imports: [
+    HttpModule.register({
+      timeout: 5000,
+    }),
     ConfigModule.forRoot({
       validationSchema: get_schema(),
       validationOptions: {
@@ -39,9 +46,9 @@ import { get_schema } from './internal/env';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserRepo]),
+    TypeOrmModule.forFeature([UserRepo, TransactionRepo]),
   ],
   controllers: [...Object.values(controllers)],
-  providers: [Helper, TwilioService, SessionStore],
+  providers: [Helper, TwilioService, SessionStore, HttpClient, PaystackService],
 })
 export class AppModule {}

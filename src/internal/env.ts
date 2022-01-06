@@ -9,6 +9,7 @@ const special_cases = {
     .uri({ scheme: ['redis'] })
     .trim()
     .required(),
+  [Env.paystack_account_email]: joi.string().email().required(),
 };
 
 export function get_schema() {

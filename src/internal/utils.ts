@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Response } from 'express';
+import { User } from '@app/users';
 
 @Injectable()
 export class Helper {
@@ -23,5 +25,9 @@ export class Helper {
     if (/\+234/.test(num)) index = 4;
 
     return '+234' + num.slice(index);
+  }
+
+  public get_user_session(res: Response) {
+    return res.locals.session as User;
   }
 }

@@ -48,8 +48,8 @@ export class SessionStore {
    * @param token
    * @returns
    */
-  get(token: string) {
-    return this.cache.get(token);
+  get<T = unknown>(token: string) {
+    return this.cache.get<T>(token);
   }
 
   /**

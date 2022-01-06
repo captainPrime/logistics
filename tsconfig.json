@@ -13,11 +13,12 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-        "@app/users": ["users/"],
-        "@app/http/*": ["http/*"],
-        "@app/internal/*": ["internal/*"],
-        "@app/sessions": ["sessions"],
-        "@app/config/*": ["config/*"]
+      "@app/users": ["users/"],
+      "@app/http/*": ["http/*"],
+      "@app/internal/*": ["internal/*"],
+      "@app/sessions": ["sessions"],
+      "@app/config/*": ["config/*"],
+      "@app/transactions": ["transactions"]
     },
     "incremental": false,
     "skipLibCheck": true,
@@ -27,6 +28,17 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "noEmit": false,
+    "typeRoots": [
+      "@types",
+      "./node_modules/@types",
+    ] 
   },
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts","scripts","db"]
+  "exclude": [
+    "node_modules",
+    "test",
+    "dist",
+    "**/*spec.ts",
+    "scripts",
+    "db"
+  ]
 }
