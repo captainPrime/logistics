@@ -104,3 +104,9 @@ export interface TransactionDTO {
    */
   currency?: CURRENCY;
 }
+
+export class TransactionNotFound extends Error {
+  constructor() {
+    super("Whoops! the provided reference doesn't match any of our records");
+  }
+}

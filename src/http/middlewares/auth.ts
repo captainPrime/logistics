@@ -3,6 +3,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { SessionStore } from '@app/sessions';
 import { UnauthorizedRequest } from '@app/internal/errors';
 import { User } from '@app/users';
+import { Request } from 'express';
 
 /**
  * Auth middleware, authenticates user to ensure
@@ -11,8 +12,7 @@ import { User } from '@app/users';
 export class AuthGuard implements CanActivate {
   constructor(private sessions: SessionStore) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const res = context.switchToHttp().getResponse();
+    const request: Request = context.switchToHttp().getRequest();
     const authSession = request.headers.authorization;
 
     if (!authSession) {
@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
     /**
      * res.locals.session would contain the user in session
      */
-    res.locals.session = JSON.parse(session as string) as User;
+    request.user = JSON.parse(session as string) as User;
 
     return true;
   }

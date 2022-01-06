@@ -1,4 +1,14 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   TransactionRepo,
   TRANSACTION_INTENTS,
@@ -6,12 +16,12 @@ import {
   TRANSACTION_TYPES,
   TRANSACTION_PROVIDERS,
   TRANSACTION_STATUS,
+  TransactionNotFound,
 } from '@app/transactions';
 import { FundWalletDTO } from './transaction.validator';
 import { AuthGuard } from '@app/http/middlewares';
-import { Response, Request } from 'express';
+import { Request } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Helper } from '@app/internal/utils';
 import {
   InvalidSignature,
   PaystackService,
@@ -26,7 +36,6 @@ import { UnauthorizedRequest } from '@app/internal/errors';
 export class TransactionController {
   constructor(
     private readonly transactionRepo: TransactionRepo,
-    private readonly helper: Helper,
     private readonly paystack: PaystackService,
   ) {}
 
@@ -36,10 +45,10 @@ export class TransactionController {
   @Post('wallet-funding')
   async initialize_wallet_funding(
     @Body() body: FundWalletDTO,
-    @Res() _res: Response,
+    @Req() req: Request,
   ) {
     const amount = body.amount;
-    const user_in_session = this.helper.get_user_session(_res);
+    const user_in_session = req.user;
     const intent = TRANSACTION_INTENTS.WALLET_FUNDING;
     const metadata = {
       user_id: user_in_session.id,
@@ -61,9 +70,11 @@ export class TransactionController {
       provider: TRANSACTION_PROVIDERS.PAYSTACK,
       transaction_reference: reference,
     };
-    await this.transactionRepo.create_transaction(transactionDTO);
+    const { id } = await this.transactionRepo.create_transaction(
+      transactionDTO,
+    );
 
-    return _res.json({ payment_url: authorization_url });
+    return { payment_url: authorization_url, transaction_id: id };
   }
 
   @Post('paystack-webhook')
@@ -97,6 +108,21 @@ export class TransactionController {
       }
 
       throw err;
+    }
+  }
+
+  @Get('/:transaction_id')
+  async get_transaction(
+    @Param('transaction_id', new ParseUUIDPipe()) transaction_id: string,
+  ) {
+    try {
+      const transaction = await this.transactionRepo.findOne(transaction_id);
+      if (!transaction) throw new TransactionNotFound();
+      return transaction;
+    } catch (err) {
+      if (err instanceof TransactionNotFound) {
+        throw new BadRequestException(err.message);
+      }
     }
   }
 }
