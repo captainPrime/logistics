@@ -36,7 +36,7 @@ export class Transaction extends Model {
   /**
    * transaction amount
    */
-  @Column({ type: 'numeric', precision: 12, scale: 2, unique: true })
+  @Column({ type: 'numeric', precision: 12, scale: 2, unsigned: true })
   amount: number;
 
   /**
@@ -61,7 +61,7 @@ export class Transaction extends Model {
    * raw data from transaction provider
    */
   @Column({ type: 'json', nullable: true })
-  raw?: JSON;
+  raw?: JSON | string;
 
   /**
    * transaction currency

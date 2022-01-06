@@ -1,17 +1,23 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import {
   TransactionRepo,
   TRANSACTION_INTENTS,
   TransactionDTO,
   TRANSACTION_TYPES,
   TRANSACTION_PROVIDERS,
+  TRANSACTION_STATUS,
 } from '@app/transactions';
 import { FundWalletDTO } from './transaction.validator';
 import { AuthGuard } from '@app/http/middlewares';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Helper } from '@app/internal/utils';
-import { PaystackService } from '@app/internal/paystack';
+import {
+  InvalidSignature,
+  PaystackService,
+  PAYSTACK_EVENTS,
+} from '@app/internal/paystack';
+import { UnauthorizedRequest } from '@app/internal/errors';
 
 @ApiTags('Transactions')
 @ApiBearerAuth()
@@ -27,7 +33,7 @@ export class TransactionController {
   /**
    * Initializes a wallet funding process
    */
-  @Post('wallet')
+  @Post('wallet-funding')
   async initialize_wallet_funding(
     @Body() body: FundWalletDTO,
     @Res() _res: Response,
@@ -58,5 +64,39 @@ export class TransactionController {
     await this.transactionRepo.create_transaction(transactionDTO);
 
     return _res.json({ payment_url: authorization_url });
+  }
+
+  @Post('paystack-webhook')
+  async update_transaction(@Req() req: Request) {
+    try {
+      console.log('hit!!!');
+      const signature = req.headers['x-paystack-signature'] as string;
+      const dto = this.paystack.verify_hash(signature, req.body);
+      const event = dto.event;
+
+      switch (event) {
+        case PAYSTACK_EVENTS.CHARGE_SUCCESS:
+          const transaction =
+            await this.transactionRepo.find_transaction_by_reference(
+              event.data.reference,
+            );
+          transaction.status = TRANSACTION_STATUS.SUCCESSFUL;
+          transaction.raw = JSON.stringify(dto);
+          this.transactionRepo.save(transaction);
+          break;
+
+        default:
+          break;
+      }
+      return 'ok';
+    } catch (err) {
+      if (err instanceof InvalidSignature) {
+        throw new UnauthorizedRequest(
+          'sorry we could not verify the source of this request',
+        );
+      }
+
+      throw err;
+    }
   }
 }
