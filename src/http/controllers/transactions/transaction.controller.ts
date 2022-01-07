@@ -31,7 +31,6 @@ import { UnauthorizedRequest } from '@app/internal/errors';
 
 @ApiTags('Transactions')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
 @Controller('transactions')
 export class TransactionController {
   constructor(
@@ -42,6 +41,7 @@ export class TransactionController {
   /**
    * Initializes a wallet funding process
    */
+  @UseGuards(AuthGuard)
   @Post('wallet-funding')
   async initialize_wallet_funding(
     @Body() body: FundWalletDTO,
@@ -80,7 +80,6 @@ export class TransactionController {
   @Post('paystack-webhook')
   async update_transaction(@Req() req: Request) {
     try {
-      console.log('hit!!!');
       const signature = req.headers['x-paystack-signature'] as string;
       const dto = this.paystack.verify_hash(signature, req.body);
       const event = dto.event;
