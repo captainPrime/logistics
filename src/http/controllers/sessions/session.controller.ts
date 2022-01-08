@@ -1,9 +1,19 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Helper } from '@app/internal/utils';
 import { Session, SessionStore } from '@app/sessions';
 import { UserRepo } from '@app/users';
 import { CreateSessionDTO } from './session.validator';
+import { AuthGuard } from '@app/http/middlewares';
+import { Request } from 'express';
 
 @ApiTags('Sessions')
 @Controller('sessions')
@@ -26,5 +36,16 @@ export class SessionController {
     const user = await this.userRepo.find_or_create_user(_body);
     const token = await this.sessions.create(user.id, user);
     return { token, user };
+  }
+
+  /**
+   * Gets user in session
+   * @param req
+   * @returns user in session
+   */
+  @Get('/')
+  @UseGuards(AuthGuard)
+  async get_user_in_session(@Req() req: Request) {
+    return req.user;
   }
 }

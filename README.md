@@ -11,7 +11,7 @@ Server side source code repository for [the kango webapp](https://kango.app)
 
 # API Development Checklist
 - [x] User onboarding
-- [ ] Wallet funding
+- [x] Wallet funding
 - [ ] Withdrawals
 - [ ] Upgrading of Users -> Hoppers
 - [ ] Logistics & Delivery services

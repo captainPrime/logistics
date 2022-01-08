@@ -9,6 +9,7 @@ import {
 import { Model } from '../internal/model';
 import { User } from '@app/users';
 import { CURRENCY } from '.';
+import { numeric } from '@app/internal/db';
 
 @Entity({ name: 'transactions' })
 export class Transaction extends Model {
@@ -34,10 +35,22 @@ export class Transaction extends Model {
   transaction_type: TRANSACTION_TYPES;
 
   /**
-   * transaction amount
+   * intended transaction amount
    */
-  @Column({ type: 'numeric', precision: 12, scale: 2, unsigned: true })
-  amount: number;
+  @Column({ ...numeric, unsigned: true })
+  amount_intended: number;
+
+  /**
+   * amount received from payment gateway
+   */
+  @Column({ ...numeric, unsigned: true, nullable: true })
+  amount_paid: number;
+
+  /**
+   * native amount used for DB analysis
+   */
+  @Column({ select: false, ...numeric, nullable: true })
+  native_amount: number;
 
   /**
    * stats of transaction

@@ -28,6 +28,8 @@ import {
   PAYSTACK_EVENTS,
 } from '@app/internal/paystack';
 import { UnauthorizedRequest } from '@app/internal/errors';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UPDATE_WALLET_BALANCE } from '@app/internal/events';
 
 @ApiTags('Transactions')
 @ApiBearerAuth()
@@ -36,6 +38,7 @@ export class TransactionController {
   constructor(
     private readonly transactionRepo: TransactionRepo,
     private readonly paystack: PaystackService,
+    private readonly emitter: EventEmitter2,
   ) {}
 
   /**
@@ -82,22 +85,30 @@ export class TransactionController {
     try {
       const signature = req.headers['x-paystack-signature'] as string;
       const dto = this.paystack.verify_hash(signature, req.body);
-      const event = dto.event;
 
-      switch (event) {
+      const transaction =
+        await this.transactionRepo.find_transaction_by_reference(
+          dto.data.reference,
+        );
+      if (!transaction) return;
+
+      transaction.raw = JSON.stringify(dto);
+
+      switch (dto.event) {
         case PAYSTACK_EVENTS.CHARGE_SUCCESS:
-          const transaction =
-            await this.transactionRepo.find_transaction_by_reference(
-              event.data.reference,
-            );
           transaction.status = TRANSACTION_STATUS.SUCCESSFUL;
-          transaction.raw = JSON.stringify(dto);
-          this.transactionRepo.save(transaction);
+          transaction.amount_paid = Number(dto.data.amount) / 100;
+          transaction.native_amount =
+            transaction.transaction_type == TRANSACTION_TYPES.CREDIT
+              ? transaction.amount_paid
+              : transaction.amount_paid * -1;
           break;
 
         default:
           break;
       }
+      await this.transactionRepo.save(transaction);
+      this.emitter.emit(UPDATE_WALLET_BALANCE, transaction.user);
       return 'ok';
     } catch (err) {
       if (err instanceof InvalidSignature) {
