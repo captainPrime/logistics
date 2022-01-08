@@ -15,9 +15,12 @@ import { TransactionRepo } from './transactions';
 import { HttpModule } from '@nestjs/axios';
 import { HttpClient } from './internal/http';
 import { PaystackService } from './internal/paystack';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { UserService } from './users';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     HttpModule.register({
       timeout: 5000,
     }),
@@ -49,6 +52,13 @@ import { PaystackService } from './internal/paystack';
     TypeOrmModule.forFeature([UserRepo, TransactionRepo]),
   ],
   controllers: [...Object.values(controllers)],
-  providers: [Helper, TwilioService, SessionStore, HttpClient, PaystackService],
+  providers: [
+    Helper,
+    TwilioService,
+    SessionStore,
+    HttpClient,
+    PaystackService,
+    UserService,
+  ],
 })
 export class AppModule {}

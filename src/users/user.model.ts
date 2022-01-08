@@ -1,6 +1,7 @@
 import { BeforeInsert, Column, Entity } from 'typeorm';
 
 import { Model } from '@app/internal/model';
+import { numeric } from '@app/internal/db';
 
 @Entity({ name: 'users' })
 export class User extends Model {
@@ -35,6 +36,16 @@ export class User extends Model {
    */
   @Column()
   account_type: ACCOUNT_TYPE;
+
+  /**
+   * current account balance
+   */
+  @Column({
+    ...numeric,
+    unsigned: true,
+    default: 0.0,
+  })
+  account_balance: number;
 
   /**
    * transform case insensitive fields to lowercase

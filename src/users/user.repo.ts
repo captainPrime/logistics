@@ -6,7 +6,10 @@ import {
 } from '@app/http/controllers/users/user.validator';
 
 import { DB_ERROR_CODES } from '@app/internal/db';
+import { Injectable } from '@nestjs/common';
+import { TRANSACTION_STATUS } from '@app/transactions';
 
+@Injectable()
 @EntityRepository(User)
 export class UserRepo extends Repository<User> {
   /**
@@ -98,6 +101,31 @@ export class UserRepo extends Repository<User> {
       }
       throw err;
     }
+  }
+
+  async update_user_balance(user: User) {
+    return await this.query(
+      `
+    BEGIN;
+
+    UPDATE
+      users
+    SET
+      account_balance = (
+        SELECT
+          sum(nullif(native_amount,0))
+        FROM
+          transactions
+        WHERE
+          user_id = '${user.id}'
+          AND status = '${TRANSACTION_STATUS.SUCCESSFUL}'
+          AND native_amount IS NOT NULL)
+      WHERE
+        id = '${user.id}';
+
+    COMMIT;
+    `,
+    );
   }
 }
 

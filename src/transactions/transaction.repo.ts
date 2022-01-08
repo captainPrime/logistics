@@ -9,7 +9,7 @@ export class TransactionRepo extends Repository<Transaction> {
     transaction.user = dto.user;
     transaction.intent = dto.intent;
     transaction.transaction_type = dto.transaction_type;
-    transaction.amount = dto.amount;
+    transaction.amount_intended = Number(dto.amount);
     transaction.status = TRANSACTION_STATUS.INITIATED;
     transaction.provider = dto.provider;
     transaction.transaction_reference = dto.transaction_reference;
@@ -19,6 +19,9 @@ export class TransactionRepo extends Repository<Transaction> {
   }
 
   find_transaction_by_reference(reference: string) {
-    return this.findOne({ where: { transaction_reference: reference } });
+    return this.findOne({
+      where: { transaction_reference: reference },
+      relations: ['user'],
+    });
   }
 }
