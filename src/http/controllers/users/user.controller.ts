@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@app/http/middlewares/';
+import { AuthGuard, AdminGuard } from '@app/http/middlewares/';
 import { UnauthorizedRequest } from '@app/internal/errors';
 import { Helper } from '@app/internal/utils';
 import { KeyNotFound, SessionStore } from '@app/sessions';
@@ -42,6 +42,7 @@ export class UserController {
   ) {}
 
   @Post('/')
+  @UseGuards(AdminGuard)
   async create_user(@Body() payload: UserDTO): Promise<User> {
     try {
       payload.phone_number = this.helper.format_phone_number(
@@ -130,6 +131,7 @@ export class UserController {
    * @returns
    */
   @Patch('hoppers/:hopper_id/status')
+  @UseGuards(AdminGuard)
   async update_application(
     @Param('hopper_id') hopper_id: string,
     @Body() dto: UpdateHopperDTO,
