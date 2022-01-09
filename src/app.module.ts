@@ -9,14 +9,13 @@ import { Helper } from './internal/utils';
 import { SessionStore } from './sessions/';
 import { TwilioService } from './internal/twilio';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepo } from './users/';
+import { HopperRepo, UserRepo, UserService } from './users/';
 import { get_schema } from './internal/env';
 import { TransactionRepo } from './transactions';
 import { HttpModule } from '@nestjs/axios';
 import { HttpClient } from './internal/http';
 import { PaystackService } from './internal/paystack';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { UserService } from './users';
 
 @Module({
   imports: [
@@ -49,7 +48,7 @@ import { UserService } from './users';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserRepo, TransactionRepo]),
+    TypeOrmModule.forFeature([UserRepo, TransactionRepo, HopperRepo]),
   ],
   controllers: [...Object.values(controllers)],
   providers: [

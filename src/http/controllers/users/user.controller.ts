@@ -3,8 +3,10 @@ import {
   Body,
   Controller,
   Param,
+  Patch,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -13,8 +15,19 @@ import { UnauthorizedRequest } from '@app/internal/errors';
 import { Helper } from '@app/internal/utils';
 import { KeyNotFound, SessionStore } from '@app/sessions';
 import { User } from '@app/users';
-import { DuplicateUser, UserNotFound, UserRepo } from '@app/users';
+import {
+  DuplicateUser,
+  UserNotFound,
+  UserRepo,
+  HopperRepo,
+  DuplicateHopper,
+  HopperNotFound,
+  InvalidHopperStatusMove,
+  HOPPER_STATUS,
+} from '@app/users';
 import { UpdateUserDTO, UserDTO } from './user.validator';
+import { Request } from 'express';
+import { UpdateHopperDTO } from './hopper.validator';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -25,6 +38,7 @@ export class UserController {
     private readonly userRepo: UserRepo,
     private readonly helper: Helper,
     private readonly sessions: SessionStore,
+    private readonly hopperRepo: HopperRepo,
   ) {}
 
   @Post('/')
@@ -62,6 +76,74 @@ export class UserController {
         throw new BadRequestException(err.message);
       if (err instanceof KeyNotFound) throw new UnauthorizedRequest();
 
+      throw err;
+    }
+  }
+
+  /**
+   * Creates a new hopper application
+   * @param req
+   * @returns
+   */
+  @Post('hoppers/apply')
+  async create_hopper_application(@Req() req: Request) {
+    try {
+      return await this.hopperRepo.create_hopper(req.user);
+    } catch (err) {
+      if (err instanceof DuplicateHopper) {
+        throw new BadRequestException(err.message);
+      }
+      throw err;
+    }
+  }
+
+  /**
+   * Reinitializes an already declind hopper application
+   * @param req
+   * @returns
+   */
+  @Post('hoppers/re-apply')
+  async hopper_reapplication(@Req() req: Request) {
+    try {
+      const hopper = await this.hopperRepo.get_hopper_by_user(req.user);
+      return await this.hopperRepo.update_hopper_status(
+        hopper,
+        HOPPER_STATUS.APPLIED,
+      );
+    } catch (err) {
+      if (err instanceof HopperNotFound) {
+        throw new BadRequestException(err.message);
+      }
+      if (err instanceof InvalidHopperStatusMove) {
+        throw new BadRequestException(
+          'sorry, you can only reply for a declined application',
+        );
+      }
+      throw err;
+    }
+  }
+
+  /**
+   * Admin update hopper application
+   * @param hopper_id
+   * @param dto
+   * @returns
+   */
+  @Patch('hoppers/:hopper_id/status')
+  async update_application(
+    @Param('hopper_id') hopper_id: string,
+    @Body() dto: UpdateHopperDTO,
+  ) {
+    try {
+      const hopper = await this.hopperRepo.get_hopper(hopper_id);
+      return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+    } catch (err) {
+      if (err instanceof HopperNotFound) {
+        throw new BadRequestException(err.message);
+      }
+      if (err instanceof InvalidHopperStatusMove) {
+        throw new BadRequestException(err.message);
+      }
       throw err;
     }
   }

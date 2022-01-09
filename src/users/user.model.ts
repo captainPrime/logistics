@@ -1,7 +1,8 @@
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToOne } from 'typeorm';
 
 import { Model } from '@app/internal/model';
 import { numeric } from '@app/internal/db';
+import { Hopper } from './hopper.model';
 
 @Entity({ name: 'users' })
 export class User extends Model {
@@ -59,6 +60,12 @@ export class User extends Model {
     if (this.email_address)
       this.email_address = this.email_address.toLowerCase();
   }
+
+  /**
+   * User relationships
+   */
+  @OneToOne(() => Hopper, (h) => h.user)
+  hopper: Hopper;
 }
 
 export enum ACCOUNT_TYPE {
