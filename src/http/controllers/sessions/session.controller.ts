@@ -7,7 +7,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Helper } from '@app/internal/utils';
 import { Session, SessionStore } from '@app/sessions';
 import { UserRepo } from '@app/users';
@@ -45,6 +45,7 @@ export class SessionController {
    */
   @Get('/')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async get_user_in_session(@Req() req: Request) {
     return req.user;
   }
