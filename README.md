@@ -13,7 +13,7 @@ Server side source code repository for [the kango webapp](https://kango.app)
 - [x] User onboarding
 - [x] Wallet funding
 - [ ] Withdrawals
-- [ ] Upgrading of Users -> Hoppers
+- [x] Upgrading of Users -> Hoppers
 - [ ] Logistics & Delivery services
     - [ ] Requesting a hopper
     - [ ] Finding a hopper
