@@ -1,12 +1,17 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 
 import { SessionStore } from '@app/sessions';
 import { UnauthorizedRequest } from '@app/internal/errors';
-import { User } from '@app/users';
+import { User, ACCOUNT_TYPE } from '@app/users';
 import { Request } from 'express';
 
 /**
- * Auth middleware, authenticates user to ensure
+ * Auth middleware, authenticates user
  */
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -38,6 +43,22 @@ export class AuthGuard implements CanActivate {
      */
     request.user = JSON.parse(session as string) as User;
 
+    return true;
+  }
+}
+
+/**
+ * Admin middleware, for authenticating admins
+ */
+@Injectable()
+export class AdminGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const req: Request = context.switchToHttp().getRequest();
+    if (req.user?.account_type !== ACCOUNT_TYPE.ADMIN) {
+      throw new ForbiddenException(
+        'You do not have authorized access to this resource',
+      );
+    }
     return true;
   }
 }

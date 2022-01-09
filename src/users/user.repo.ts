@@ -1,5 +1,5 @@
 import { ACCOUNT_TYPE, FindUser, User } from './user.model';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Not, Repository } from 'typeorm';
 import {
   UpdateUserDTO,
   UserDTO,
@@ -24,6 +24,7 @@ export class UserRepo extends Repository<User> {
     user.first_name = user_data.first_name;
     user.last_name = user_data.last_name;
     user.phone_number = user_data.phone_number;
+    user.account_type = ACCOUNT_TYPE.USER;
     try {
       user = await this.save(user);
       return user;
@@ -40,7 +41,9 @@ export class UserRepo extends Repository<User> {
    * @param phone_number user's phone number
    */
   async get_or_create_user_by_phone_number(phone_number: string) {
-    let user = await this.findOne({ where: { phone_number } });
+    let user = await this.findOne({
+      where: { phone_number, account_type: Not(ACCOUNT_TYPE.ADMIN) },
+    });
 
     if (!user) {
       user = new User();
@@ -76,11 +79,17 @@ export class UserRepo extends Repository<User> {
 
     if (params.email_address) {
       user = await this.findOne({
-        where: { email_address: params.email_address },
+        where: {
+          email_address: params.email_address,
+          account_type: Not(ACCOUNT_TYPE.ADMIN),
+        },
       });
     } else if (params.phone_number) {
       user = await this.findOne({
-        where: { phone_number: params.phone_number },
+        where: {
+          phone_number: params.phone_number,
+          account_type: Not(ACCOUNT_TYPE.ADMIN),
+        },
       });
     }
 
