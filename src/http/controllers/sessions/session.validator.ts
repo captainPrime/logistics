@@ -1,4 +1,11 @@
-import { IsEmail, IsOptional, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsLatitude,
+  IsLongitude,
+  IsNotEmpty,
+  IsOptional,
+  Matches,
+} from 'class-validator';
 import {
   PHONE_NUMBER_REGEX,
   PHONE_NUMBER_REGEX_ERROR,
@@ -18,4 +25,14 @@ export class CreateSessionDTO {
   @IsOptional()
   @Matches(PHONE_NUMBER_REGEX, { message: PHONE_NUMBER_REGEX_ERROR })
   phone_number?: string;
+}
+
+export class UpdateLocationDTO {
+  @IsNotEmpty()
+  @IsLongitude()
+  lng: number;
+
+  @IsNotEmpty()
+  @IsLatitude()
+  lat: number;
 }
