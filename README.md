@@ -15,7 +15,9 @@ Server side source code repository for [the kango webapp](https://kango.app)
 - [ ] Withdrawals
 - [x] Upgrading of Users -> Hoppers
 - [ ] Logistics & Delivery services
+    - [x] Hopper update location
     - [ ] Requesting a hopper
+    - [ ] Price Determination algorithm
     - [ ] Finding a hopper
     - [ ] Tracking a hopper
     - [ ] Rating a hopper

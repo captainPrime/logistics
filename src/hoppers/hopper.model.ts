@@ -1,7 +1,7 @@
 import { Model } from '@app/internal/model';
 import { Point } from 'geojson';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 @Entity({ name: 'hoppers' })
 export class Hopper extends Model {

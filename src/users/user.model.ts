@@ -2,7 +2,7 @@ import { BeforeInsert, Column, Entity, OneToOne } from 'typeorm';
 
 import { Model } from '@app/internal/model';
 import { numeric } from '@app/internal/db';
-import { Hopper } from './hopper.model';
+import { Hopper } from '../hoppers/hopper.model';
 
 @Entity({ name: 'users' })
 export class User extends Model {

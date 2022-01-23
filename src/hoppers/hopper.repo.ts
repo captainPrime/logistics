@@ -1,7 +1,7 @@
 import { DB_ERROR_CODES } from '@app/internal/db';
 import { EntityRepository, Repository } from 'typeorm';
 import { Hopper, HOPPER_STATUS } from './hopper.model';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 @EntityRepository(Hopper)
 export class HopperRepo extends Repository<Hopper> {

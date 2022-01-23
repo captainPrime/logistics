@@ -1,4 +1,4 @@
-import { HOPPER_STATUS } from '@app/users';
+import { HOPPER_STATUS } from '@app/hoppers';
 import { IsIn } from 'class-validator';
 
 export class UpdateHopperDTO {

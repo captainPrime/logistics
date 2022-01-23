@@ -56,6 +56,12 @@ export class SessionController {
     return req.user;
   }
 
+  /**
+   * Hopper update current location
+   * @param req
+   * @param dto
+   * @returns
+   */
   @Patch('location')
   @UseGuards(AuthGuard)
   async update_location(@Req() req: Request, @Body() dto: UpdateLocationDTO) {
