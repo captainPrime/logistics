@@ -1,7 +1,7 @@
 import { LocationQueueDTO, QUEUE } from '@app/internal/queue';
 import { Job } from 'bull';
 import { Processor, Process } from '@nestjs/bull';
-import { HopperRepo } from 'users';
+import { HopperRepo } from '@app/hoppers';
 
 @Processor(QUEUE.LOCATION)
 export class LocationQueueConsumer {

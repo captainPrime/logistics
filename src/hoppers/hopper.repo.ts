@@ -1,7 +1,7 @@
 import { DB_ERROR_CODES } from '@app/internal/db';
 import { EntityRepository, Repository } from 'typeorm';
 import { Hopper, HOPPER_STATUS } from './hopper.model';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 @EntityRepository(Hopper)
 export class HopperRepo extends Repository<Hopper> {
@@ -36,7 +36,7 @@ export class HopperRepo extends Repository<Hopper> {
     const hopper_status_map = {
       [HOPPER_STATUS.APPLIED]: {
         [HOPPER_STATUS.DECLINED]: true,
-        [HOPPER_STATUS.ACTIVE]: true,
+        [HOPPER_STATUS.IDLE]: true,
       },
       [HOPPER_STATUS.DECLINED]: {
         [HOPPER_STATUS.APPLIED]: true,

@@ -10,7 +10,8 @@ import { Helper } from './internal/utils';
 import { SessionStore } from './sessions/';
 import { TwilioService } from './internal/twilio';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HopperRepo, UserRepo, UserService } from './users/';
+import { UserRepo, UserService } from './users/';
+import { HopperRepo } from './hoppers';
 import { get_schema } from './internal/env';
 import { TransactionRepo } from './transactions';
 import { HttpModule } from '@nestjs/axios';
@@ -19,6 +20,8 @@ import { PaystackService } from './internal/paystack';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BullModule } from '@nestjs/bull';
 import { QUEUE } from './internal/queue';
+import { OrderRepo } from './orders';
+import { OrderRequestRepo } from 'order-requests/order-request.repo';
 
 @Module({
   imports: [
@@ -62,7 +65,13 @@ import { QUEUE } from './internal/queue';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserRepo, TransactionRepo, HopperRepo]),
+    TypeOrmModule.forFeature([
+      UserRepo,
+      TransactionRepo,
+      HopperRepo,
+      OrderRepo,
+      OrderRequestRepo,
+    ]),
   ],
   controllers: [...Object.values(controllers)],
   providers: [

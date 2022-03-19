@@ -15,16 +15,14 @@ import { UnauthorizedRequest } from '@app/internal/errors';
 import { Helper } from '@app/internal/utils';
 import { KeyNotFound, SessionStore } from '@app/sessions';
 import { User } from '@app/users';
+import { DuplicateUser, UserNotFound, UserRepo } from '@app/users';
 import {
-  DuplicateUser,
-  UserNotFound,
-  UserRepo,
   HopperRepo,
   DuplicateHopper,
   HopperNotFound,
   InvalidHopperStatusMove,
   HOPPER_STATUS,
-} from '@app/users';
+} from '@app/hoppers';
 import { UpdateUserDTO, UserDTO } from './user.validator';
 import { Request } from 'express';
 import { UpdateHopperDTO } from './hopper.validator';

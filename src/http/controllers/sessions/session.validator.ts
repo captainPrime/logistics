@@ -27,7 +27,7 @@ export class CreateSessionDTO {
   phone_number?: string;
 }
 
-export class UpdateLocationDTO {
+export class LocationDTO {
   @IsNotEmpty()
   @IsLongitude()
   lng: number;

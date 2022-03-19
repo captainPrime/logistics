@@ -1,7 +1,8 @@
 import { Model } from '@app/internal/model';
 import { Point } from 'geojson';
+// import { Order } from '@app/orders/';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { User } from './user.model';
+import { User } from '../users/user.model';
 
 @Entity({ name: 'hoppers' })
 export class Hopper extends Model {
@@ -22,14 +23,20 @@ export class Hopper extends Model {
   })
   location: Point;
 
-  @OneToOne(() => User, (u) => u.hopper)
+  @OneToOne(() => User)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  /**
+   * Relationships
+   */
+  // @OneToMany(() => Order)
+  // orders: Order[];
 }
 
 export enum HOPPER_STATUS {
   /**
-   * Initiali status of a hopper, for applying to be a hopper
+   * Initial status of a hopper, for applying to be a hopper
    */
   APPLIED = 'applied',
   /**
@@ -39,7 +46,11 @@ export enum HOPPER_STATUS {
   /**
    * A hopper who is currently not working
    */
-  ACTIVE = 'active',
+  IDLE = 'idle',
+  /**
+   *  A hopper who has been booked but not yet working (e.g on the way to the the pickup location);
+   */
+  BOOKED = 'booked',
   /**
    * A user whose hopper request was declined
    */
