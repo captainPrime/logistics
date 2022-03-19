@@ -20,6 +20,8 @@ import { PaystackService } from './internal/paystack';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BullModule } from '@nestjs/bull';
 import { QUEUE } from './internal/queue';
+import { OrderRepo } from './orders';
+import { OrderRequestRepo } from 'order-requests/order-request.repo';
 
 @Module({
   imports: [
@@ -63,7 +65,13 @@ import { QUEUE } from './internal/queue';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([UserRepo, TransactionRepo, HopperRepo]),
+    TypeOrmModule.forFeature([
+      UserRepo,
+      TransactionRepo,
+      HopperRepo,
+      OrderRepo,
+      OrderRequestRepo,
+    ]),
   ],
   controllers: [...Object.values(controllers)],
   providers: [

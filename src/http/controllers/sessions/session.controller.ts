@@ -12,7 +12,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Helper } from '@app/internal/utils';
 import { Session, SessionStore } from '@app/sessions';
 import { UserRepo } from '@app/users';
-import { CreateSessionDTO, UpdateLocationDTO } from './session.validator';
+import { CreateSessionDTO, LocationDTO } from './session.validator';
 import { AuthGuard } from '@app/http/middlewares';
 import { Request } from 'express';
 import { Queue } from 'bull';
@@ -64,7 +64,7 @@ export class SessionController {
    */
   @Patch('location')
   @UseGuards(AuthGuard)
-  async update_location(@Req() req: Request, @Body() dto: UpdateLocationDTO) {
+  async update_location(@Req() req: Request, @Body() dto: LocationDTO) {
     const params: LocationQueueDTO = {
       user_id: req.user.id,
       location: [dto.lng, dto.lat],

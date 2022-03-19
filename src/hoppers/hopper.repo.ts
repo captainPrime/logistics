@@ -36,7 +36,7 @@ export class HopperRepo extends Repository<Hopper> {
     const hopper_status_map = {
       [HOPPER_STATUS.APPLIED]: {
         [HOPPER_STATUS.DECLINED]: true,
-        [HOPPER_STATUS.ACTIVE]: true,
+        [HOPPER_STATUS.IDLE]: true,
       },
       [HOPPER_STATUS.DECLINED]: {
         [HOPPER_STATUS.APPLIED]: true,

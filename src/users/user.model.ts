@@ -1,8 +1,9 @@
-import { BeforeInsert, Column, Entity, OneToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToMany, OneToOne } from 'typeorm';
 
 import { Model } from '@app/internal/model';
 import { numeric } from '@app/internal/db';
 import { Hopper } from '../hoppers/hopper.model';
+import { Order } from '@app/orders/';
 
 @Entity({ name: 'users' })
 export class User extends Model {
@@ -66,6 +67,9 @@ export class User extends Model {
    */
   @OneToOne(() => Hopper, (h) => h.user)
   hopper: Hopper;
+
+  @OneToMany(() => Order, (o) => o.user)
+  orders: Order[];
 }
 
 export enum ACCOUNT_TYPE {
