@@ -1,9 +1,10 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { Logger, ValidationPipe } from '@nestjs/common';
+
 import { AllExceptionsFilter } from './internal/errors';
+import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const { PORT, SERVICE_ENV, SERVICE_NAME } = process.env;
