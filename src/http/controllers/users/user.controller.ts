@@ -176,4 +176,56 @@ export class UserController {
    }
  }
 
+/**
+   *  Track Hopper 
+   * @param hopper_id
+   * @param dto
+   * @returns
+   */
+ @Patch('hoppers/:hopper_id/track')
+ @UseGuards(AdminGuard)
+ async track_hopper(
+   @Param('hopper_id') hopper_id: string,
+   @Body() dto: UpdateHopperDTO,
+ ) {
+   try {
+     const hopper = await this.hopperRepo.get_hopper(hopper_id);
+     return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+   } catch (err) {
+     if (err instanceof HopperNotFound) {
+       throw new BadRequestException(err.message);
+     }
+     if (err instanceof InvalidHopperStatusMove) {
+       throw new BadRequestException(err.message);
+     }
+     throw err;
+   }
+ }
+/**
+   *  Track Hopper 
+   * @param hopper_id
+   * @param dto
+   * @returns
+   */
+ @Post('hoppers/:hopper_id/rate')
+ @UseGuards(AdminGuard)
+ async rate_hopper(
+   @Param('hopper_id') hopper_id: string,
+   @Body() dto: UpdateHopperDTO,
+ ) {
+   try {
+     const hopper = await this.hopperRepo.get_hopper(hopper_id);
+     return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+   } catch (err) {
+     if (err instanceof HopperNotFound) {
+       throw new BadRequestException(err.message);
+     }
+     if (err instanceof InvalidHopperStatusMove) {
+       throw new BadRequestException(err.message);
+     }
+     throw err;
+   }
+ }
+
+
 }
