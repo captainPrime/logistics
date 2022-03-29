@@ -149,7 +149,7 @@ export class UserController {
   }
 
 
-  // New dev
+
 /**
    *  Hopper Withdrawals
    * @param hopper_id
