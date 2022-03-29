@@ -31,7 +31,7 @@ async function bootstrap() {
           type: 'http', // I`ve attempted type: 'apiKey' too
           in: 'Header'
         },
-        'token', // This name here is important for matching up with  @ApiBearerAuth('token') in your controller!
+        'access-token', // This name here is important for matching up with  @ApiBearerAuth('access-token') in your controller!
       )
          .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);

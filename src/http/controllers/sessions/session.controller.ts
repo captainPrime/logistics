@@ -50,9 +50,11 @@ export class SessionController {
    * @returns user in session
    */
   @Get('/')
-  @UseGuards(AuthGuard)
-  // @ApiBearerAuth('token')
-  @ApiBearerAuth('token') //edit here
+  //@UseGuards(AuthGuard)
+  // @ApiBearerAuth('access-token')
+  //@ApiBearerAuth('access-token') //edit here
+ 
+
   async get_user_in_session(@Req() req: Request) {
     return req.user;
   }

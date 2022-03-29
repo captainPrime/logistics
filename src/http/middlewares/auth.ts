@@ -18,6 +18,8 @@ export class AuthGuard implements CanActivate {
   constructor(private sessions: SessionStore) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
+    // console.log(request.headers);
+    
     const authSession = request.headers.authorization;
 
     if (!authSession) {
