@@ -32,7 +32,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UPDATE_WALLET_BALANCE } from '@app/internal/events';
 
 @ApiTags('Transactions')
-@ApiBearerAuth()
+ @ApiBearerAuth('token')
 @Controller('transactions')
 export class TransactionController {
   constructor(

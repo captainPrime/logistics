@@ -18,3 +18,7 @@ export class amountFiguresOnTransactionsTable1641598937253 implements MigrationI
     }
 
 }
+
+
+//Numeric(12,2) allows numbers up to and including 9 999 999 999.99
+

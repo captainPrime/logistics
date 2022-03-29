@@ -21,20 +21,19 @@ async function bootstrap() {
       .setTitle(SERVICE_NAME.toUpperCase())
       .setDescription('API specification')
       .setVersion('1.0')
-      // .addBearerAuth(
-      //   { 
-      //     // I was also testing it without prefix 'Bearer ' before the JWT
-      //     description: `[just text field] Please enter token in following format: Bearer <JWT>`,
-      //     name: 'Authorization',
-      //     bearerFormat: 'Bearer', // I`ve tested not to use this field, but the result was the same
-      //     scheme: 'Bearer',
-      //     type: 'http', // I`ve attempted type: 'apiKey' too
-      //     in: 'Header'
-      //   },
-      //   'token', // This name here is important for matching up with @ApiBearerAuth() in your controller!
-      // )
-      .addBearerAuth({ description: `[just text field] Please enter token in following format: Bearer <JWT>`, type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'token')
-      .build();
+      .addBearerAuth(
+        { 
+          // I was also testing it without prefix 'Bearer ' before the JWT
+          description: `Please enter token in following format: Bearer <JWT>`,
+          name: 'Authorization',
+          bearerFormat: 'Bearer', // I`ve tested not to use this field, but the result was the same
+          scheme: 'Bearer',
+          type: 'http', // I`ve attempted type: 'apiKey' too
+          in: 'Header'
+        },
+        'token', // This name here is important for matching up with  @ApiBearerAuth('token') in your controller!
+      )
+         .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup('api-spec', app, document);
   }
