@@ -8,3 +8,20 @@ export class FundWalletDTO {
   @Min(MINIMUM_AMOUNT)
   amount: number;
 }
+
+export class HopperWithdrawDTO {
+  @IsNumber()
+  @IsInt()
+  @IsNotEmpty()
+  @Min(MINIMUM_AMOUNT)
+  amount: number;
+}
+
+
+export class AdminWithdrawDTO {
+  @IsNumber()
+  @IsInt()
+  @IsNotEmpty()
+  @Min(MINIMUM_AMOUNT)
+  amount: number;
+}

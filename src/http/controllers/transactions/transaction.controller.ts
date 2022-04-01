@@ -27,9 +27,18 @@ import {
   PaystackService,
   PAYSTACK_EVENTS,
 } from '@app/internal/paystack';
+
+import {
+  HopperRepo,
+  HopperNotFound,
+  InvalidHopperStatusMove,
+  
+} from '@app/hoppers';
+
 import { UnauthorizedRequest } from '@app/internal/errors';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UPDATE_WALLET_BALANCE } from '@app/internal/events';
+import { UpdateHopperDTO } from '../users/hopper.validator';
 
 @ApiTags('Transactions')
  @ApiBearerAuth('access-token')
@@ -39,6 +48,8 @@ export class TransactionController {
     private readonly transactionRepo: TransactionRepo,
     private readonly paystack: PaystackService,
     private readonly emitter: EventEmitter2,
+
+    private readonly hopperRepo: HopperRepo,
   ) {}
 
   /**
@@ -64,6 +75,8 @@ export class TransactionController {
     );
     const { authorization_url, reference } = data;
 
+    //DTO : data transfer object (DTO) is an object that carries data between processes.
+
     // create a new transaction
     const transactionDTO: TransactionDTO = {
       amount,
@@ -79,6 +92,9 @@ export class TransactionController {
 
     return { payment_url: authorization_url, transaction_id: id };
   }
+
+
+
 
   @Post('paystack-webhook')
   async update_transaction(@Req() req: Request) {
@@ -135,4 +151,77 @@ export class TransactionController {
       }
     }
   }
+
+  @UseGuards(AuthGuard)
+  @Get('/:transaction_id')
+  async withdraw_transaction(@Req() req: Request) {
+    try {
+      const transaction = req.user;
+      if (!transaction) throw new TransactionNotFound();
+      return transaction;
+    } catch (err) {
+      if (err instanceof TransactionNotFound) {
+        throw new BadRequestException(err.message);
+      }
+    }
+  }
+
+  /**
+   *  Hopper Withdrawals
+   * @param hopper_id
+   * @param dto
+   * @returns
+   */
+ @Post('hoppers/:hopper_id/withdraw')
+ //@UseGuards(AdminGuard)
+ async hopper_withdrawal(
+   @Param('hopper_id') hopper_id: string,
+   @Body() dto: UpdateHopperDTO,
+ ) {
+   try {
+     const hopper = await this.hopperRepo.get_hopper(hopper_id);
+     return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+
+
+
+
+   } catch (err) {
+     if (err instanceof HopperNotFound) { 
+       throw new BadRequestException(err.message);
+     }
+     if (err instanceof InvalidHopperStatusMove) {
+       throw new BadRequestException(err.message);
+     }
+     throw err;
+   }
+ }
+
+
+
+   /**
+   *  Hopper Withdrawals
+   * @param hopper_id
+   * @param dto
+   * @returns
+   */
+    @Post('admin/:admin_id/withdraw')
+    //@UseGuards(AdminGuard)
+    async admin_withdrawal(
+      @Param('admin_id') hopper_id: string,
+      @Body() dto: UpdateHopperDTO,
+    ) {
+      try {
+        const hopper = await this.hopperRepo.get_hopper(hopper_id);
+        return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+      } catch (err) {
+        if (err instanceof HopperNotFound) {
+          throw new BadRequestException(err.message);
+        }
+        if (err instanceof InvalidHopperStatusMove) {
+          throw new BadRequestException(err.message);
+        }
+        throw err;
+      }
+    }
+ 
 }

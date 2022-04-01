@@ -3,6 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHmac } from 'crypto';
 import { HttpClient, HttpMethod, RequestDTO } from './http';
+import { v4 } from 'uuid';
+import { Repository } from 'typeorm';
+import { UserRepo } from '@app/users';
+import { Request } from 'express';
 
 export interface PaystackResponse<T> {
   status: boolean;
@@ -66,6 +70,7 @@ export class PaystackService {
   ): RequestDTO {
     headers['Authorization'] = `Bearer ${this.secret_key}`;
     headers['Content-Type'] = 'application/json';
+    
 
     return { url, headers, method, data };
   }
@@ -74,6 +79,7 @@ export class PaystackService {
    * initializes a new paystack charge transactions
    * @param amount_in_naira amount to be paid
    * @param meta metadata to be sent to paystack
+
    * @returns paystack transaction response
    */
   initialize_transaction(amount_in_naira: number, meta: JSON | string) {
@@ -89,6 +95,74 @@ export class PaystackService {
       request,
     );
   }
+
+
+  withdraw_transaction(amount_in_naira: number, meta: JSON | string) {
+
+  
+    // const bankDetails = await Repository.findOne({
+    //   where: {
+    //     id: bankId,
+    //     userId,
+    //   },
+    // });
+
+    // if (!bankDetails) {
+    //   return res.status(404).json({
+    //     message: "Bank details not found",
+    //   });
+    // }
+
+    // const { data } = await paystackClient.post(TRANSFER_URL, {
+    //   type: "nuban",
+    //   name: `${this.first_name} ${user.lastName}`,
+    //   bank_code: bankDetails.bankCode,
+    //   account_number: bankDetails.accountNumber,
+    //   currency: "NGN",
+    // });
+
+  
+    //   const url = `${this.base_url}initialize`;
+    //   const data = {};
+    //   data['amount'] = amount_in_naira * 100;
+    //   data['metadata'] = meta;
+    //   data['email'] = this.email_address;
+  
+      // const request = this.make_request(url, HttpMethod.POST, data);
+  
+      const newUser = req.user;
+    
+    const responseCreateReciepientData = newUser;//request.data;
+
+    console.log(
+      "responseCreateReciepientData============>",
+      responseCreateReciepientData
+    );
+
+    const recipientCode = responseCreateReciepientData.recipient_code; //e.g RCP_1i2k27vk4suemug
+    if (recipientCode) {
+   
+    const referenceId = v4();
+    const url = `${this.base_url}transfer`;
+    const data = {};
+    data['amount'] = amount_in_naira * 100;
+    data['metadata'] = meta;
+    data['email'] = this.email_address;
+    data['reason'] = `Withdrawal from your Quickbunny wallet`;
+    data['currency'] = "NGN";
+    data['reference'] = referenceId;
+    data['callbackURL'] =  "https://webhook.site/041a3538-d5d3-4a37-a9c1-2dcab86f88ff";
+
+
+
+
+    const request = this.make_request(url, HttpMethod.POST, data);
+
+    return this.http.do<PaystackResponse<InitializedTransactionResponse>>(
+      request,
+    );
+  }
+}
 
   /**
    * Fetches transaction from paystack

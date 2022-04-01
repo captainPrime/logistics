@@ -150,31 +150,7 @@ export class UserController {
 
 
 
-/**
-   *  Hopper Withdrawals
-   * @param hopper_id
-   * @param dto
-   * @returns
-   */
- @Post('hoppers/:hopper_id/withdraw')
- @UseGuards(AdminGuard)
- async hopper_withdrawal(
-   @Param('hopper_id') hopper_id: string,
-   @Body() dto: UpdateHopperDTO,
- ) {
-   try {
-     const hopper = await this.hopperRepo.get_hopper(hopper_id);
-     return await this.hopperRepo.update_hopper_status(hopper, dto.status);
-   } catch (err) {
-     if (err instanceof HopperNotFound) {
-       throw new BadRequestException(err.message);
-     }
-     if (err instanceof InvalidHopperStatusMove) {
-       throw new BadRequestException(err.message);
-     }
-     throw err;
-   }
- }
+
 
 /**
    *  Track Hopper 

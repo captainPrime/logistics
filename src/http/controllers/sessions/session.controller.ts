@@ -50,8 +50,8 @@ export class SessionController {
    * @returns user in session
    */
   @Get('/')
-  //@UseGuards(AuthGuard)
-  // @ApiBearerAuth('access-token')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access-token')
   //@ApiBearerAuth('access-token') //edit here
  
 

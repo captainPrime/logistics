@@ -80,6 +80,10 @@ export enum ACCOUNT_TYPE {
 
 export interface FindUser {
   /**
+   * user's id
+   */
+   user_id?: string;
+  /**
    * user's email address
    */
   email_address?: string;
