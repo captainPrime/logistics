@@ -19,7 +19,7 @@ import {
   TransactionNotFound,
   BankDetailsNotFound,
 } from '@app/transactions';
-import { FundWalletDTO } from './transaction.validator';
+import { FundWalletDTO } from './bankdetails.validator';
 import { AuthGuard } from '@app/http/middlewares';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -40,6 +40,7 @@ import { UnauthorizedRequest } from '@app/internal/errors';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { UPDATE_WALLET_BALANCE } from '@app/internal/events';
 import { UpdateHopperDTO } from '../users/hopper.validator';
+
 
 @ApiTags('Transactions')
  @ApiBearerAuth('access-token')
@@ -153,7 +154,6 @@ export class TransactionController {
     }
   }
 
- 
 
   /**
    *  Hopper Withdrawals

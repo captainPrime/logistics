@@ -97,42 +97,22 @@ export class PaystackService {
   }
 
 
-  withdraw_transaction(amount_in_naira: number, meta: JSON | string) {
+  withdraw_transaction(amount_in_naira: number, meta: JSON | string, bankDetails: JSON | string, userData: JSON | string) {
 
+      const transferUrl = `${this.base_url}initialize`;
+      const data = {};
+      data['type'] = ""; //amount_in_naira * 100;
+      data['name'] = ""; //`${userData.first_name} ${userData.lastName}`;
+      data['bank_code'] =""; //bankDetails.bankCode;
+      data['account_number'] = ""; //bankDetails.accountNumber;
+      data['currency'] = "NGN";
   
-    // const bankDetails = await Repository.findOne({
-    //   where: {
-    //     id: bankId,
-    //     userId,
-    //   },
-    // });
-
-    // if (!bankDetails) {
-    //   return res.status(404).json({
-    //     message: "Bank details not found",
-    //   });
-    // }
-
-    // const { data } = await paystackClient.post(TRANSFER_URL, {
-    //   type: "nuban",
-    //   name: `${this.first_name} ${user.lastName}`,
-    //   bank_code: bankDetails.bankCode,
-    //   account_number: bankDetails.accountNumber,
-    //   currency: "NGN",
-    // });
-
   
-    //   const url = `${this.base_url}initialize`;
-    //   const data = {};
-    //   data['amount'] = amount_in_naira * 100;
-    //   data['metadata'] = meta;
-    //   data['email'] = this.email_address;
+      const request = this.make_request(transferUrl, HttpMethod.POST, data);
   
-      // const request = this.make_request(url, HttpMethod.POST, data);
-  
-      const newUser = req.user;
     
-    const responseCreateReciepientData = newUser;//request.data;
+    
+    const responseCreateReciepientData = request.data;
 
     console.log(
       "responseCreateReciepientData============>",
@@ -156,10 +136,10 @@ export class PaystackService {
 
 
 
-    const request = this.make_request(url, HttpMethod.POST, data);
+    const withdrawRequest = this.make_request(url, HttpMethod.POST, data);
 
     return this.http.do<PaystackResponse<InitializedTransactionResponse>>(
-      request,
+      withdrawRequest,
     );
   }
 }

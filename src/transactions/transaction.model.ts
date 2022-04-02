@@ -123,3 +123,9 @@ export class TransactionNotFound extends Error {
     super("Whoops! the provided reference doesn't match any of our records");
   }
 }
+
+export class BankDetailsNotFound extends Error {
+  constructor() {
+    super("Whoops! Bank details not found");
+  }
+}
