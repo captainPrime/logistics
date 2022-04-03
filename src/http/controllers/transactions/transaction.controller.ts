@@ -17,9 +17,9 @@ import {
   TRANSACTION_PROVIDERS,
   TRANSACTION_STATUS,
   TransactionNotFound,
-  BankDetailsNotFound,
+  // BankDetailsNotFound,
 } from '@app/transactions';
-import { FundWalletDTO } from './transaction.validator';
+import { FundWalletDTO, priceAlgorithmDTO } from './transaction.validator';
 import { AuthGuard } from '@app/http/middlewares';
 import { Request } from 'express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -156,7 +156,7 @@ export class TransactionController {
  
 
   /**
-   *  Hopper Withdrawals
+   * Creates Hopper Withdrawal
    * @param hopper_id
    * @param dto
    * @returns
@@ -202,9 +202,8 @@ export class TransactionController {
  }
 
 
-
    /**
-   *  Hopper Withdrawals
+   * Admin Withdrawal
    * @param hopper_id
    * @param dto
    * @returns
@@ -228,5 +227,49 @@ export class TransactionController {
         throw err;
       }
     }
+
+
+    /////Hopper price algorithm
+ /**
+   * Price Determination algorithm 
+   * @param hopper_id
+   * @param dto
+   * @returns
+   */
+  @Post('hoppers/:hopper_id/price')
+  async destination_price(
+    @Param('hopper_id') hopper_id: string,
+    @Body() dto: priceAlgorithmDTO,
+  ) {
+    try {
+      const hopper = await this.hopperRepo.get_hopper(hopper_id);
+      // const distance =
+      // const traffic =
+      // const averageVelocity = 
+      // const time = 
+      // const waitingTime = 
+
+
+      //get and Hopper
+      
+      const d = new Date();
+      const amOrPm = (d.getHours() < 12) ? "AM" : "PM";
+      const daylightOrNight = amOrPm;
+
+      console.log("daylightOrNight", daylightOrNight);
+      const totalPrice = hopper;
+      return totalPrice;
+    } catch (err) {
+      if (err instanceof HopperNotFound) {
+        throw new BadRequestException(err.message);
+      }
+      if (err instanceof InvalidHopperStatusMove) {
+        throw new BadRequestException(err.message);
+      }
+      throw err;
+    }
+  }
  
 }
+
+

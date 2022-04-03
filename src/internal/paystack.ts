@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { createHmac } from 'crypto';
 import { HttpClient, HttpMethod, RequestDTO } from './http';
 import { v4 } from 'uuid';
-import { Repository } from 'typeorm';
-import { UserRepo } from '@app/users';
-import { Request } from 'express';
+// import { Repository } from 'typeorm';
+// import { UserRepo } from '@app/users';
+// import { Request } from 'express';
 
 export interface PaystackResponse<T> {
   status: boolean;

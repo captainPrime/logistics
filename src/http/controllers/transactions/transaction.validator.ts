@@ -25,3 +25,12 @@ export class AdminWithdrawDTO {
   @Min(MINIMUM_AMOUNT)
   amount: number;
 }
+
+
+export class priceAlgorithmDTO {
+  @IsNumber()
+  @IsInt()
+  @IsNotEmpty()
+  @Min(MINIMUM_AMOUNT)
+  amount: number;
+}

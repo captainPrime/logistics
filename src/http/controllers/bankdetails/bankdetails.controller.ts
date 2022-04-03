@@ -17,7 +17,7 @@ import {
   TRANSACTION_PROVIDERS,
   TRANSACTION_STATUS,
   TransactionNotFound,
-  BankDetailsNotFound,
+  // BankDetailsNotFound,
 } from '@app/transactions';
 import { FundWalletDTO } from './bankdetails.validator';
 import { AuthGuard } from '@app/http/middlewares';

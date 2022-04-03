@@ -85,6 +85,7 @@ export class UserController {
    * @returns
    */
   @Post('hoppers/apply')
+
   async create_hopper_application(@Req() req: Request) {
     try {
       return await this.hopperRepo.create_hopper(req.user);
@@ -129,7 +130,6 @@ export class UserController {
    * @returns
    */
   @Patch('hoppers/:hopper_id/status')
-  @UseGuards(AdminGuard)
   async update_application(
     @Param('hopper_id') hopper_id: string,
     @Body() dto: UpdateHopperDTO,
@@ -148,12 +148,36 @@ export class UserController {
     }
   }
 
-
+/**
+   * Find available Hopper 
+   * @param hopper_id
+   * @param dto
+   * @returns
+   */
+ @Patch('hoppers/:hopper_id/find')
+ //@UseGuards(AuthGuard)
+ async find_hopper(
+   @Param('hopper_id') hopper_id: string,
+   @Body() dto: UpdateHopperDTO,
+ ) {
+   try {
+     const hopper = await this.hopperRepo.get_hopper(hopper_id);
+     return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+   } catch (err) {
+     if (err instanceof HopperNotFound) {
+       throw new BadRequestException(err.message);
+     }
+     if (err instanceof InvalidHopperStatusMove) {
+       throw new BadRequestException(err.message);
+     }
+     throw err;
+   }
+ }
 
 
 
 /**
-   *  Track Hopper 
+   * Track an Hopper 
    * @param hopper_id
    * @param dto
    * @returns
@@ -178,7 +202,7 @@ export class UserController {
    }
  }
 /**
-   *  Track Hopper 
+   * Rate an Hopper after delivery
    * @param hopper_id
    * @param dto
    * @returns
@@ -204,36 +228,7 @@ export class UserController {
  }
 
 
- /**
-   *  Track Hopper 
-   * @param hopper_id
-   * @param dto
-   * @returns
-   */
-  @Post('hoppers/:hopper_id/price')
-  @UseGuards(AdminGuard)
-  async destination_price(
-    @Param('hopper_id') hopper_id: string,
-    @Body() dto: UpdateHopperDTO,
-  ) {
-    try {
-      const hopper = await this.hopperRepo.get_hopper(hopper_id);
-      // const distance =
-      // const traffic =
-      // const averageVelocity = 
-      // const time = 
-      // const waitingTime = 
-      return await this.hopperRepo.update_hopper_status(hopper, dto.status);
-    } catch (err) {
-      if (err instanceof HopperNotFound) {
-        throw new BadRequestException(err.message);
-      }
-      if (err instanceof InvalidHopperStatusMove) {
-        throw new BadRequestException(err.message);
-      }
-      throw err;
-    }
-  }
+
  
 
 }
