@@ -21,7 +21,10 @@
       "@app/internal/*": ["internal/*"],
       "@app/sessions": ["sessions"],
       "@app/config/*": ["config/*"],
-      "@app/transactions": ["transactions"]
+      "@app/transactions": ["transactions"],
+      "@app/bankdetails": ["bankdetails"],
+
+
     },
     "incremental": false,
     "skipLibCheck": true,

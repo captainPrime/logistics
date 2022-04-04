@@ -4,6 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { createHmac } from 'crypto';
 import { HttpClient, HttpMethod, RequestDTO } from './http';
 import { v4 } from 'uuid';
+import { RedisService } from './cache';
+
+
 // import { Repository } from 'typeorm';
 // import { UserRepo } from '@app/users';
 // import { Request } from 'express';
@@ -95,6 +98,54 @@ export class PaystackService {
       request,
     );
   }
+
+  retrieveBanks = async (
+    country = "nigeria"
+  ): Promise<
+    [success: boolean, data: Record<string, any>, status?: number]
+  > => {
+    const url = `/bank/country=${country}`;
+    const ONE_DAY = 24 * 60 * 60;
+    const ONE_DAY_IN_MS = ONE_DAY * 1000;
+    const ONE_WEEK_IN_MS = 7 * ONE_DAY_IN_MS;
+
+    const cachedBanks = await RedisService.retrieveKey("BANKS");
+    if (cachedBanks) {
+      return [true, JSON.parse(cachedBanks)];
+    }
+    try {
+      const response = await this.make_request(url, HttpMethod.GET);
+      const { data } = await response.data;
+      //cache abokifx
+      RedisService.cacheData("BANKS", data, ONE_WEEK_IN_MS);
+
+      return [true, data];
+    } catch (error) {
+      const response = await error.response;
+      return [false, response.data, response.status];
+    }
+  };
+
+  retrieveSingleBank = async (
+    bankCode,
+    country = "nigeria"
+  ): Promise<
+    [success: boolean, data: Record<string, any>, status?: number]
+  > => {
+    const [success, data, error] = await this.retrieveBanks(country);
+
+    if (!success) {
+      return [success, data, error];
+    }
+
+    const singleBank = data.find(
+      (bank) => String(bank.code) === String(bankCode)
+    );
+
+    console.log("paystack single bank", data);
+    return [true, singleBank];
+  };
+
 
 
   withdraw_transaction(amount_in_naira: number, meta: JSON | string, bankDetails: JSON | string, userData: JSON | string) {

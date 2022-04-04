@@ -124,8 +124,3 @@ export class TransactionNotFound extends Error {
   }
 }
 
-export class BankDetailsNotFound extends Error {
-  constructor() {
-    super("Whoops! Bank details not found");
-  }
-}
