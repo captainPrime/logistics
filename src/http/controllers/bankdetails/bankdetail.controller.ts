@@ -25,12 +25,12 @@ import {
 import { v4 } from 'uuid'; 
 import { UnauthorizedRequest } from '@app/internal/errors';
 
-@ApiTags('Transactions')
+@ApiTags('Bankdetail')
  @ApiBearerAuth('access-token')
 @Controller('bankdetails')
 export class BankdetailsController {
   constructor(
-    private readonly bankdetailsRepo: BankdetailRepo,
+    private readonly bankdetailRepo: BankdetailRepo,
     private readonly paystack: PaystackService,
    
   ) {}
@@ -66,7 +66,7 @@ export class BankdetailsController {
 
 
 
-    const exists = await this.bankdetailsRepo.bank_exist(user_id, account_number);
+    const exists = await this.bankdetailRepo.bank_exist(user_id, account_number);
 
     if (exists) {
       return { message: "Account Number already exist"};
@@ -91,7 +91,7 @@ export class BankdetailsController {
       //currency,
       user : user_in_session,
     };
-    const result  = await this.bankdetailsRepo.add_bank_details(
+    const result  = await this.bankdetailRepo.add_bank_details(
       bankdetailsDTO,
     );
 
@@ -107,7 +107,7 @@ export class BankdetailsController {
     try {
      
       const bankdetail =
-        await this.bankdetailsRepo.find_bank_by_userid(user_id);
+        await this.bankdetailRepo.find_bank_by_userid(user_id);
       if (!bankdetail) return;
 
     

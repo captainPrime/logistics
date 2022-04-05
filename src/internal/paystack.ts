@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { createHmac } from 'crypto';
 import { HttpClient, HttpMethod, RequestDTO } from './http';
 import { v4 } from 'uuid';
-import { RedisService } from './cache';
+// import { RedisService } from './cache';
 
 
 // import { Repository } from 'typeorm';
@@ -105,19 +105,19 @@ export class PaystackService {
     [success: boolean, data: Record<string, any>, status?: number]
   > => {
     const url = `/bank/country=${country}`;
-    const ONE_DAY = 24 * 60 * 60;
-    const ONE_DAY_IN_MS = ONE_DAY * 1000;
-    const ONE_WEEK_IN_MS = 7 * ONE_DAY_IN_MS;
+    // const ONE_DAY = 24 * 60 * 60;
+    // const ONE_DAY_IN_MS = ONE_DAY * 1000;
+    // const ONE_WEEK_IN_MS = 7 * ONE_DAY_IN_MS;
 
-    const cachedBanks = await RedisService.retrieveKey("BANKS");
-    if (cachedBanks) {
-      return [true, JSON.parse(cachedBanks)];
-    }
+    // const cachedBanks = await RedisService.retrieveKey("BANKS");
+    // if (cachedBanks) {
+    //   return [true, JSON.parse(cachedBanks)];
+    // }
     try {
       const response = await this.make_request(url, HttpMethod.GET);
       const { data } = await response.data;
       //cache abokifx
-      RedisService.cacheData("BANKS", data, ONE_WEEK_IN_MS);
+      // RedisService.cacheData("BANKS", data, ONE_WEEK_IN_MS);
 
       return [true, data];
     } catch (error) {

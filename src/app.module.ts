@@ -22,7 +22,7 @@ import { BullModule } from '@nestjs/bull';
 import { QUEUE } from './internal/queue';
 import { OrderRepo } from './orders';
 import { OrderRequestRepo } from 'order-requests/order-request.repo';
-
+import { BankdetailRepo } from './bankdetails';
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
@@ -71,6 +71,8 @@ import { OrderRequestRepo } from 'order-requests/order-request.repo';
       HopperRepo,
       OrderRepo,
       OrderRequestRepo,
+      BankdetailRepo,
+
     ]),
   ],
   controllers: [...Object.values(controllers)],
