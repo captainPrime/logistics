@@ -243,21 +243,35 @@ export class TransactionController {
   ) {
     try {
       const hopper = await this.hopperRepo.get_hopper(hopper_id);
-      // const distance =
-      // const traffic =
-      // const averageVelocity = 
-      // const time = 
-      // const waitingTime = 
+
+      const d = new Date();
+      const amOrPm = (d.getHours() < 12) ? "AM" : "PM";
+      const daylightOrNight = amOrPm;
+      let distance;
+      if (daylightOrNight === "AM") {
+        distance = (dto.distance) * 95;
+      } else if (daylightOrNight === "PM") {
+        distance = (dto.distance) * 95;
+      }
+        //NGN 95 per KM
+
+      const hopper_distance = hopper;
+      const traffic = (dto.traffic) * 120;   
+      
+      const averageVelocity = dto.averageVelocity;
+
+      const surge = dto.surge * 120;   //surge NGN120 per KM
+      const waitingTime = dto.waitingTime;
 
 
       //get and Hopper
       
-      const d = new Date();
-      const amOrPm = (d.getHours() < 12) ? "AM" : "PM";
-      const daylightOrNight = amOrPm;
+     
 
       console.log("daylightOrNight", daylightOrNight);
-      const totalPrice = hopper;
+
+
+      const totalPrice =(distance + traffic + averageVelocity + surge + waitingTime + hopper_distance);
       return totalPrice;
     } catch (err) {
       if (err instanceof HopperNotFound) {

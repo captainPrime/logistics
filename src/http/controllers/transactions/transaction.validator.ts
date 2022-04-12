@@ -28,9 +28,13 @@ export class AdminWithdrawDTO {
 
 
 export class priceAlgorithmDTO {
-  @IsNumber()
-  @IsInt()
+ 
   @IsNotEmpty()
-  @Min(MINIMUM_AMOUNT)
+  
   amount: number;
+  distance: number;
+  traffic: number;
+  averageVelocity: number;
+  surge: number;
+  waitingTime: string;
 }
