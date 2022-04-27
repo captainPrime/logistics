@@ -4,7 +4,7 @@
   "builds": [
     { "src": "nest build", "use": "@vercel/node" },
     {
-      "prebuild": "rimraf dist",
+     
       "build": "nest build",
       "start": "node dist/main.js",
       "dev": "nodemon nest start --watch",
