@@ -22,8 +22,9 @@ import {
   HopperNotFound,
   InvalidHopperStatusMove,
   HOPPER_STATUS,
+  HOPPER_RATING
 } from '@app/hoppers';
-import { UpdateUserDTO, UserDTO } from './user.validator';
+import { UpdateUserDTO, UserDTO, userHopperRequestDTO } from './user.validator';
 import { Request } from 'express';
 import { UpdateHopperDTO } from './hopper.validator';
 
@@ -123,6 +124,7 @@ export class UserController {
     }
   }
 
+
   /**
    * Admin update hopper application
    * @param hopper_id
@@ -158,11 +160,16 @@ export class UserController {
  //@UseGuards(AuthGuard)
  async find_hopper(
    @Param('hopper_id') hopper_id: string,
-   @Body() dto: UpdateHopperDTO,
+   @Body() dto: userHopperRequestDTO,
  ) {
    try {
+
+    //find hopper within 50km radar
+
+
+
      const hopper = await this.hopperRepo.get_hopper(hopper_id);
-     return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+     return await this.hopperRepo.find_one_avaliable_hopper(hopper, dto.hopper_id);
    } catch (err) {
      if (err instanceof HopperNotFound) {
        throw new BadRequestException(err.message);
@@ -201,6 +208,9 @@ export class UserController {
      throw err;
    }
  }
+
+
+
 /**
    * Rate an Hopper after delivery
    * @param hopper_id
@@ -211,7 +221,7 @@ export class UserController {
  @UseGuards(AdminGuard)
  async rate_hopper(
    @Param('hopper_id') hopper_id: string,
-   @Body() dto: UpdateHopperDTO,
+   @Body() dto: HOPPER_RATING,
  ) {
    try {
      const hopper = await this.hopperRepo.get_hopper(hopper_id);
@@ -228,7 +238,30 @@ export class UserController {
  }
 
 
+//Google Map API
 
+//  var origin1 = new google.maps.LatLng(55.930385, -3.118425);
+// var origin2 = 'Greenwich, England';
+// var destinationA = 'Stockholm, Sweden';
+// var destinationB = new google.maps.LatLng(50.087692, 14.421150);
+
+// var service = new google.maps.DistanceMatrixService();
+// service.getDistanceMatrix(
+//   {
+//     origins: [origin1, origin2],
+//     destinations: [destinationA, destinationB],
+//     travelMode: 'DRIVING',
+//     transitOptions: TransitOptions,
+//     drivingOptions: DrivingOptions,
+//     unitSystem: UnitSystem,
+//     avoidHighways: Boolean,
+//     avoidTolls: Boolean,
+//   }, callback);
+
+// function callback(response, status) {
+//   // See Parsing the Results for
+//   // the basics of a callback function.
+// }
  
 
 }

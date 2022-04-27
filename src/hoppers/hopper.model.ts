@@ -56,3 +56,27 @@ export enum HOPPER_STATUS {
    */
   DECLINED = 'declined',
 }
+
+
+export enum HOPPER_RATING {
+  /**
+   * 5 star hopper rating
+   */
+  STAR5 = 'star5',
+  /**
+   * 4 star hopper rating
+   */
+  STAR4 = 'star4',
+  /**
+   * 3 star hopper rating
+   */
+  STAR3 = 'star3',
+  /**
+   *  2 star hopper rating
+   **/
+  STAR2 = 'star2',
+  /**
+   * 1 star hopper rating
+   */
+  STAR1 = 'star1',
+}

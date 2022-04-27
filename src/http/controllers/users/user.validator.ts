@@ -31,3 +31,44 @@ export class UpdateUserDTO {
   @IsEmail()
   email_address?: string;
 }
+
+
+export declare class userHopperRequestDTO {
+  @IsNotEmpty()
+  destination: string;
+  @IsNotEmpty()
+  destinationLat: string;
+  @IsNotEmpty()
+  destinationLng: string;
+  @IsNotEmpty()
+  pickup: string;
+  @IsNotEmpty()
+  pickupLat: string;
+  @IsNotEmpty()
+  pickupLng: string;
+  @IsNotEmpty()
+  hopper_id: string;
+  @IsNotEmpty()
+  totalRequestCost: string;
+  @IsNotEmpty()
+  totalRequestDistance: string;
+  @IsNotEmpty()
+  totalRequestDuration: string;
+  @IsNotEmpty()
+  requestPayType: string;
+  @IsNotEmpty()
+  requestPayStatus: string;
+  @IsNotEmpty()
+  requestMadeStatus: string;
+  @IsNotEmpty()
+  user_id: string;
+  @IsNotEmpty()
+  requestPaymentID: string;
+  @IsNotEmpty()
+  requestCreatedAt: string;
+
+
+
+  @IsOptional()
+  email_address?: string;
+}
