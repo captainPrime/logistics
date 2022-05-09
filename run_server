@@ -1,13 +1,13 @@
 #!/bin/sh
 # install yarn
 
-yarn install;
+npm install;
 
 # generate migration file
-yarn migration:config;
+npm migration:config;
 
 #run migrations
-yarn migrate;
+npm migrate;
 
 #start application
-yarn start;
+npm start;
