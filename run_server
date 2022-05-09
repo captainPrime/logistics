@@ -1,4 +1,7 @@
 #!/bin/sh
+# install yarn
+
+yarn install;
 
 # generate migration file
 yarn migration:config;
