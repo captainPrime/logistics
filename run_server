@@ -9,9 +9,5 @@ npm migration:config;
 #run migrations
 npm migrate;
 
-
-#run build
-npm build;
-
 #start application
 npm start;
