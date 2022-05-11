@@ -7,6 +7,7 @@ export declare class User extends Model {
     email_address?: string;
     phone_number: string;
     account_type: ACCOUNT_TYPE;
+    picture_url?: string;
     account_balance: number;
     transform_fields_to_lowercase(): void;
     hopper: Hopper;

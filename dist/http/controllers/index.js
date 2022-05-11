@@ -16,4 +16,5 @@ __exportStar(require("./sessions/session.controller"), exports);
 __exportStar(require("./transactions/transaction.controller"), exports);
 __exportStar(require("./order-requests/order-request.controller"), exports);
 __exportStar(require("./bankdetails/bankdetail.controller"), exports);
+__exportStar(require("../../app.controller"), exports);
 //# sourceMappingURL=index.js.map

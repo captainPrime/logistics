@@ -30,6 +30,7 @@ const queue_1 = require("./internal/queue");
 const orders_1 = require("./orders");
 const order_request_repo_1 = require("./order-requests/order-request.repo");
 const bankdetails_1 = require("./bankdetails");
+const app_service_1 = require("./app.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -86,6 +87,7 @@ AppModule = __decorate([
         ],
         controllers: [...Object.values(controllers)],
         providers: [
+            app_service_1.AppService,
             utils_1.Helper,
             twilio_1.TwilioService,
             sessions_1.SessionStore,

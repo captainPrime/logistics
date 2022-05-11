@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HOPPER_STATUS = exports.Hopper = void 0;
+exports.HOPPER_RATING = exports.HOPPER_STATUS = exports.Hopper = void 0;
 const openapi = require("@nestjs/swagger");
 const model_1 = require("../internal/model");
 const typeorm_1 = require("typeorm");
@@ -49,4 +49,12 @@ var HOPPER_STATUS;
     HOPPER_STATUS["BOOKED"] = "booked";
     HOPPER_STATUS["DECLINED"] = "declined";
 })(HOPPER_STATUS = exports.HOPPER_STATUS || (exports.HOPPER_STATUS = {}));
+var HOPPER_RATING;
+(function (HOPPER_RATING) {
+    HOPPER_RATING["STAR5"] = "star5";
+    HOPPER_RATING["STAR4"] = "star4";
+    HOPPER_RATING["STAR3"] = "star3";
+    HOPPER_RATING["STAR2"] = "star2";
+    HOPPER_RATING["STAR1"] = "star1";
+})(HOPPER_RATING = exports.HOPPER_RATING || (exports.HOPPER_RATING = {}));
 //# sourceMappingURL=hopper.model.js.map

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SessionController = void 0;
 const openapi = require("@nestjs/swagger");
@@ -21,7 +22,8 @@ const sessions_1 = require("../../../sessions");
 const users_1 = require("../../../users");
 const session_validator_1 = require("./session.validator");
 const middlewares_1 = require("../../middlewares");
-const bull_1 = require("@nestjs/bull");
+const bull_1 = require("bull");
+const bull_2 = require("@nestjs/bull");
 const queue_1 = require("../../../internal/queue");
 let SessionController = class SessionController {
     constructor(userRepo, helper, sessions, locationQueue) {
@@ -36,7 +38,7 @@ let SessionController = class SessionController {
         if (_body.phone_number)
             _body.phone_number = this.helper.format_phone_number(_body.phone_number);
         const user = await this.userRepo.find_or_create_user(_body);
-        const token = await this.sessions.create(user.id, user);
+        const token = await this.sessions.create(user.email_address, user);
         return { token, user };
     }
     async get_user_in_session(req) {
@@ -44,7 +46,7 @@ let SessionController = class SessionController {
     }
     async update_location(req, dto) {
         const params = {
-            user_id: req.user.id,
+            user_id: req.user.email_address,
             location: [dto.lng, dto.lat],
         };
         await this.locationQueue.add(params);
@@ -52,6 +54,7 @@ let SessionController = class SessionController {
     }
 };
 __decorate([
+    openapi.ApiOperation({ description: "create user session" }),
     (0, common_1.Post)('/'),
     openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
@@ -72,7 +75,7 @@ __decorate([
 ], SessionController.prototype, "get_user_in_session", null);
 __decorate([
     openapi.ApiOperation({ description: "Hopper update current location" }),
-    (0, common_1.Patch)('location'),
+    (0, common_1.Patch)('/location'),
     (0, common_1.UseGuards)(middlewares_1.AuthGuard),
     openapi.ApiResponse({ status: 200, type: String }),
     __param(0, (0, common_1.Req)()),
@@ -84,10 +87,10 @@ __decorate([
 SessionController = __decorate([
     (0, swagger_1.ApiTags)('Sessions'),
     (0, common_1.Controller)('sessions'),
-    __param(3, (0, bull_1.InjectQueue)(queue_1.QUEUE.LOCATION)),
+    __param(3, (0, bull_2.InjectQueue)(queue_1.QUEUE.LOCATION)),
     __metadata("design:paramtypes", [users_1.UserRepo,
         utils_1.Helper,
-        sessions_1.SessionStore, Object])
+        sessions_1.SessionStore, typeof (_a = typeof bull_1.Queue !== "undefined" && bull_1.Queue) === "function" ? _a : Object])
 ], SessionController);
 exports.SessionController = SessionController;
 //# sourceMappingURL=session.controller.js.map

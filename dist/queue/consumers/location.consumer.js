@@ -8,10 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocationQueueConsumer = void 0;
 const queue_1 = require("../../internal/queue");
-const bull_1 = require("@nestjs/bull");
+const bull_1 = require("bull");
+const bull_2 = require("@nestjs/bull");
 const hoppers_1 = require("../../hoppers");
 let LocationQueueConsumer = class LocationQueueConsumer {
     constructor(hoppersRepo) {
@@ -23,13 +25,13 @@ let LocationQueueConsumer = class LocationQueueConsumer {
     }
 };
 __decorate([
-    (0, bull_1.Process)(),
+    (0, bull_2.Process)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [typeof (_a = typeof bull_1.Job !== "undefined" && bull_1.Job) === "function" ? _a : Object]),
     __metadata("design:returntype", Promise)
 ], LocationQueueConsumer.prototype, "update", null);
 LocationQueueConsumer = __decorate([
-    (0, bull_1.Processor)(queue_1.QUEUE.LOCATION),
+    (0, bull_2.Processor)(queue_1.QUEUE.LOCATION),
     __metadata("design:paramtypes", [hoppers_1.HopperRepo])
 ], LocationQueueConsumer);
 exports.LocationQueueConsumer = LocationQueueConsumer;

@@ -15,7 +15,7 @@ const class_validator_1 = require("class-validator");
 const constants_1 = require("../../../internal/constants");
 class UserDTO {
     static _OPENAPI_METADATA_FACTORY() {
-        return { first_name: { required: true, type: () => String }, last_name: { required: true, type: () => String }, email_address: { required: true, type: () => String }, phone_number: { required: true, type: () => String } };
+        return { first_name: { required: true, type: () => String }, last_name: { required: true, type: () => String }, email_address: { required: true, type: () => String }, picture_url: { required: false, type: () => String }, phone_number: { required: true, type: () => String } };
     }
 }
 __decorate([
@@ -32,6 +32,10 @@ __decorate([
     __metadata("design:type", String)
 ], UserDTO.prototype, "email_address", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UserDTO.prototype, "picture_url", void 0);
+__decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.Matches)(constants_1.PHONE_NUMBER_REGEX, { message: constants_1.PHONE_NUMBER_REGEX_ERROR }),
     __metadata("design:type", String)
@@ -39,7 +43,7 @@ __decorate([
 exports.UserDTO = UserDTO;
 class UpdateUserDTO {
     static _OPENAPI_METADATA_FACTORY() {
-        return { first_name: { required: false, type: () => String }, last_name: { required: false, type: () => String }, email_address: { required: false, type: () => String } };
+        return { first_name: { required: false, type: () => String }, last_name: { required: false, type: () => String }, email_address: { required: false, type: () => String }, picture_url: { required: false, type: () => String } };
     }
 }
 __decorate([
@@ -55,5 +59,9 @@ __decorate([
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], UpdateUserDTO.prototype, "email_address", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserDTO.prototype, "picture_url", void 0);
 exports.UpdateUserDTO = UpdateUserDTO;
 //# sourceMappingURL=user.validator.js.map

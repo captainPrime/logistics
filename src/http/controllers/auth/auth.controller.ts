@@ -23,11 +23,10 @@ export class AuthController {
     private sessions: SessionStore,
   ) {}
 
-  /**
-   * Sends verification phone to a phone number prior to granting authorization
+  /** Sends verification phone to a phone number prior to granting authorization
    * @param payload
    * @returns string
-   */
+   **/
   @Post('/phone')
   async send_verification_code(@Body() payload: SendCodeDTO) {
     const phone_number = this.helpers.format_phone_number(payload.phone_number);
@@ -54,7 +53,7 @@ export class AuthController {
     const user = await this.userRepo.get_or_create_user_by_phone_number(
       phone_number,
     );
-    const token = await this.sessions.create(user.id, user);
+    const token = await this.sessions.create(user.email_address, user);
 
     return { token, user };
   }

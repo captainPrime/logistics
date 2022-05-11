@@ -23,6 +23,8 @@ import { QUEUE } from './internal/queue';
 import { OrderRepo } from './orders';
 import { OrderRequestRepo } from 'order-requests/order-request.repo';
 import { BankdetailRepo } from './bankdetails';
+//import { AppController } from './app.controller';
+import { AppService } from './app.service';
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
@@ -77,6 +79,7 @@ import { BankdetailRepo } from './bankdetails';
   ],
   controllers: [...Object.values(controllers)],
   providers: [
+    AppService,
     Helper,
     TwilioService,
     SessionStore,

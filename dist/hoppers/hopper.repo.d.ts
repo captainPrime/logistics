@@ -6,6 +6,7 @@ export declare class HopperRepo extends Repository<Hopper> {
     get_hopper(id: string): Promise<Hopper>;
     get_hopper_by_user(user: User): Promise<Hopper>;
     update_hopper_status(hopper: Hopper, status: HOPPER_STATUS): Promise<Hopper>;
+    find_one_avaliable_hopper(hopper: Hopper, status: HOPPER_STATUS): Promise<Hopper>;
 }
 export declare class DuplicateHopper extends Error {
     constructor();

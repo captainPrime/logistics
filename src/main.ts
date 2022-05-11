@@ -28,7 +28,7 @@ async function bootstrap() {
           name: 'Authorization',
           bearerFormat: 'Bearer', // I`ve tested not to use this field, but the result was the same
           scheme: 'Bearer',
-          type: 'http', // I`ve attempted type: 'apiKey' too
+          type: 'http', 
           in: 'Header'
         },
         'access-token', // This name here is important for matching up with  @ApiBearerAuth('access-token') in your controller!
@@ -41,4 +41,5 @@ async function bootstrap() {
   await app.listen(PORT);
   Logger.log(`Application running on ${await app.getUrl()}`, 'Application');
 }
+
 bootstrap();

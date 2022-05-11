@@ -37,7 +37,7 @@ export class UserRepo extends Repository<User> {
   }
 
   /**
-   * checks is user exists. cretes a user if not found
+   * checks is user exists. creates a user if not found
    * @param phone_number user's phone number
    */
   async get_or_create_user_by_phone_number(phone_number: string) {
@@ -53,6 +53,23 @@ export class UserRepo extends Repository<User> {
     }
     return user;
   }
+
+
+    /**
+   * find/fetch record/profile of a user
+   * @param email_address user's email_address
+   */
+     async get_user_by_user_id(email_address: string) {
+      let user = await this.findOne({
+        where: { email_address, account_type: Not(ACCOUNT_TYPE.ADMIN) },
+      });
+  
+      if (!user) throw new UserNotFound();
+
+      return user;
+    }
+  
+
 
   /**
    * updates user's details. throws exception if user not found.
@@ -70,6 +87,9 @@ export class UserRepo extends Repository<User> {
     if (payload.last_name) user.last_name = payload.last_name;
 
     if (payload.email_address) user.email_address = payload.email_address;
+
+    if (payload.picture_url) user.picture_url = payload.picture_url;
+    
 
     return await this.save(user);
   }
@@ -126,11 +146,11 @@ export class UserRepo extends Repository<User> {
         FROM
           transactions
         WHERE
-          user_id = '${user.id}'
+          user_id = '${user.email_address}'
           AND status = '${TRANSACTION_STATUS.SUCCESSFUL}'
           AND native_amount IS NOT NULL)
       WHERE
-        id = '${user.id}';
+        id = '${user.email_address}';
 
     COMMIT;
     `,

@@ -17,6 +17,6 @@ export class UserService {
     console.log('updating user balance');
     await this.user_repo.update_user_balance(user);
 
-    await this.sessions.update(user.id, await this.user_repo.findOne(user.id));
+    await this.sessions.update(user.email_address, await this.user_repo.findOne(user.email_address));
   }
 }

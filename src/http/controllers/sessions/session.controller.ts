@@ -30,6 +30,12 @@ export class SessionController {
     private readonly locationQueue: Queue<LocationQueueDTO>,
   ) {}
 
+
+   /**
+   * create user session
+   * @param req
+   * @returns string
+   */
   @Post('/')
   async create_user_session(@Body() _body: CreateSessionDTO): Promise<Session> {
     if (!_body.email_address && !_body.phone_number)
@@ -40,7 +46,7 @@ export class SessionController {
       _body.phone_number = this.helper.format_phone_number(_body.phone_number);
 
     const user = await this.userRepo.find_or_create_user(_body);
-    const token = await this.sessions.create(user.id, user);
+    const token = await this.sessions.create(user.email_address, user);
     return { token, user };
   }
 
@@ -65,11 +71,11 @@ export class SessionController {
    * @param dto
    * @returns
    */
-  @Patch('location')
+  @Patch('/location')
   @UseGuards(AuthGuard)
   async update_location(@Req() req: Request, @Body() dto: LocationDTO) {
     const params: LocationQueueDTO = {
-      user_id: req.user.id,
+      user_id: req.user.email_address,
       location: [dto.lng, dto.lat],
     };
     await this.locationQueue.add(params);

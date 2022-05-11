@@ -15,6 +15,9 @@ export class UserDTO {
   @IsEmail()
   email_address: string;
 
+  @IsOptional()
+  picture_url?: string;
+  
   @IsNotEmpty()
   @Matches(PHONE_NUMBER_REGEX, { message: PHONE_NUMBER_REGEX_ERROR })
   phone_number: string;
@@ -30,6 +33,12 @@ export class UpdateUserDTO {
   @IsOptional()
   @IsEmail()
   email_address?: string;
+
+
+  @IsOptional()
+  picture_url?: string;
+
+
 }
 
 

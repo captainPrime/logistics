@@ -53,20 +53,25 @@ export class TransactionController {
     private readonly hopperRepo: HopperRepo,
   ) {}
 
-  /**
+
+
+    /**
    * Initializes a wallet funding process
+   * @param dto
+   * @param req
+   * @returns string
    */
   @UseGuards(AuthGuard)
-  @Post('wallet-funding')
+  @Post('/wallet_funding')
   async initialize_wallet_funding(
-    @Body() body: FundWalletDTO,
+    @Body() dto: FundWalletDTO,
     @Req() req: Request,
   ) {
-    const amount = body.amount;
+    const amount = dto.amount;
     const user_in_session = req.user;
     const intent = TRANSACTION_INTENTS.WALLET_FUNDING;
     const metadata = {
-      user_id: user_in_session.id,
+      user_id: user_in_session.email_address,
       intent,
     };
 
@@ -95,9 +100,13 @@ export class TransactionController {
   }
 
 
+  /**
+   * paystack a webhook
+   * @param req
+   * @returns string
+   */
 
-
-  @Post('paystack-webhook')
+  @Post('/paystack_webhook')
   async update_transaction(@Req() req: Request) {
     try {
       const signature = req.headers['x-paystack-signature'] as string;
@@ -138,6 +147,12 @@ export class TransactionController {
     }
   }
 
+
+
+  /**
+   * Fetch transactions by transaction ID
+   * @returns string
+   */
   @Get('/:transaction_id')
   async get_transaction(
     @Param('transaction_id', new ParseUUIDPipe()) transaction_id: string,
@@ -161,12 +176,11 @@ export class TransactionController {
    * @param dto
    * @returns
    */
- @Post('hoppers/:hopper_id/withdraw')
+ @Post('/hoppers/:hopper_id/withdraw')
  //@UseGuards(AdminGuard)
  async hopper_withdrawal(
    @Param('hopper_id') hopper_id: string,
    @Body() dto: UpdateHopperDTO,
-   @Req() req: Request,
  ) {
    try {
      const hopper = await this.hopperRepo.get_hopper(hopper_id);
@@ -208,7 +222,7 @@ export class TransactionController {
    * @param dto
    * @returns
    */
-    @Post('admin/:admin_id/withdraw')
+    @Post('/admin/:admin_id/withdraw')
     //@UseGuards(AdminGuard)
     async admin_withdrawal(
       @Param('admin_id') hopper_id: string,
@@ -236,7 +250,7 @@ export class TransactionController {
    * @param dto
    * @returns
    */
-  @Post('hoppers/:hopper_id/price')
+  @Post('/hoppers/:hopper_id/price')
   async destination_price(
     @Param('hopper_id') hopper_id: string,
     @Body() dto: priceAlgorithmDTO,

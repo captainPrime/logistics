@@ -1,7 +1,4 @@
 #!/bin/sh
-# install yarn
-
-npm install;
 
 # generate migration file
 npm migration:config;

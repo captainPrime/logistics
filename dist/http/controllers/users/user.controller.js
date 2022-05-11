@@ -46,8 +46,23 @@ let UserController = class UserController {
     async update_user(user_id, payload) {
         try {
             const user = await this.userRepo.update_user(user_id, payload);
-            await this.sessions.update(user.id, user);
+            await this.sessions.update(user.email_address, user);
             return user;
+        }
+        catch (err) {
+            if (err instanceof users_1.UserNotFound)
+                throw new common_1.BadRequestException(err.message);
+            if (err instanceof sessions_1.KeyNotFound)
+                throw new errors_1.UnauthorizedRequest();
+            throw err;
+        }
+    }
+    async find_user(email_address) {
+        try {
+            const user_detail = await this.userRepo.get_user_by_user_id(email_address);
+            if (!user_detail)
+                return;
+            return user_detail;
         }
         catch (err) {
             if (err instanceof users_1.UserNotFound)
@@ -98,10 +113,10 @@ let UserController = class UserController {
             throw err;
         }
     }
-    async find_hopper(hopper_id, dto) {
+    async find_hopper(hopper_id) {
         try {
             const hopper = await this.hopperRepo.get_hopper(hopper_id);
-            return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+            return await this.hopperRepo.find_one_avaliable_hopper(hopper, hoppers_1.HOPPER_STATUS.APPLIED);
         }
         catch (err) {
             if (err instanceof hoppers_1.HopperNotFound) {
@@ -116,7 +131,7 @@ let UserController = class UserController {
     async track_hopper(hopper_id, dto) {
         try {
             const hopper = await this.hopperRepo.get_hopper(hopper_id);
-            return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+            return await this.hopperRepo.update_hopper_status(hopper, hoppers_1.HOPPER_STATUS.BOOKED);
         }
         catch (err) {
             if (err instanceof hoppers_1.HopperNotFound) {
@@ -131,7 +146,7 @@ let UserController = class UserController {
     async rate_hopper(hopper_id, dto) {
         try {
             const hopper = await this.hopperRepo.get_hopper(hopper_id);
-            return await this.hopperRepo.update_hopper_status(hopper, dto.status);
+            return await this.hopperRepo.update_hopper_status(hopper, hoppers_1.HOPPER_STATUS.BOOKED);
         }
         catch (err) {
             if (err instanceof hoppers_1.HopperNotFound) {
@@ -146,7 +161,6 @@ let UserController = class UserController {
 };
 __decorate([
     (0, common_1.Post)('/'),
-    (0, common_1.UseGuards)(middlewares_1.AdminGuard),
     openapi.ApiResponse({ status: 201, type: require("../../../users/user.model").User }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -157,15 +171,24 @@ __decorate([
     openapi.ApiOperation({ description: "updates a user in the system" }),
     (0, common_1.Put)('/:user_id'),
     openapi.ApiResponse({ status: 200, type: require("../../../users/user.model").User }),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('user_id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, user_validator_1.UpdateUserDTO]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "update_user", null);
 __decorate([
+    openapi.ApiOperation({ description: "find a user in the system" }),
+    (0, common_1.Get)('/find_user/:email_address'),
+    openapi.ApiResponse({ status: 200, type: require("../../../users/user.model").User }),
+    __param(0, (0, common_1.Param)('email_address')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "find_user", null);
+__decorate([
     openapi.ApiOperation({ description: "Creates a new hopper application" }),
-    (0, common_1.Post)('hoppers/apply'),
+    (0, common_1.Post)('/hoppers/apply'),
     openapi.ApiResponse({ status: 201, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -174,7 +197,7 @@ __decorate([
 ], UserController.prototype, "create_hopper_application", null);
 __decorate([
     openapi.ApiOperation({ description: "Reinitializes an already declind hopper application" }),
-    (0, common_1.Post)('hoppers/re-apply'),
+    (0, common_1.Post)('/hoppers/re-apply'),
     openapi.ApiResponse({ status: 201, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -183,7 +206,7 @@ __decorate([
 ], UserController.prototype, "hopper_reapplication", null);
 __decorate([
     openapi.ApiOperation({ description: "Admin update hopper application" }),
-    (0, common_1.Patch)('hoppers/:hopper_id/status'),
+    (0, common_1.Patch)('/hoppers/:hopper_id/status'),
     openapi.ApiResponse({ status: 200, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Param)('hopper_id')),
     __param(1, (0, common_1.Body)()),
@@ -193,18 +216,16 @@ __decorate([
 ], UserController.prototype, "update_application", null);
 __decorate([
     openapi.ApiOperation({ description: "Find available Hopper" }),
-    (0, common_1.Patch)('hoppers/:hopper_id/find'),
+    (0, common_1.Patch)('/hoppers/:hopper_id/find'),
     openapi.ApiResponse({ status: 200, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Param)('hopper_id')),
-    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, hopper_validator_1.UpdateHopperDTO]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "find_hopper", null);
 __decorate([
     openapi.ApiOperation({ description: "Track an Hopper" }),
-    (0, common_1.Patch)('hoppers/:hopper_id/track'),
-    (0, common_1.UseGuards)(middlewares_1.AdminGuard),
+    (0, common_1.Patch)('/hoppers/:hopper_id/track'),
     openapi.ApiResponse({ status: 200, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Param)('hopper_id')),
     __param(1, (0, common_1.Body)()),
@@ -214,13 +235,12 @@ __decorate([
 ], UserController.prototype, "track_hopper", null);
 __decorate([
     openapi.ApiOperation({ description: "Rate an Hopper after delivery" }),
-    (0, common_1.Post)('hoppers/:hopper_id/rate'),
-    (0, common_1.UseGuards)(middlewares_1.AdminGuard),
+    (0, common_1.Post)('/hoppers/:hopper_id/rate'),
     openapi.ApiResponse({ status: 201, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Param)('hopper_id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, hopper_validator_1.UpdateHopperDTO]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "rate_hopper", null);
 UserController = __decorate([

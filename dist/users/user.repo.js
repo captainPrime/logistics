@@ -43,6 +43,14 @@ let UserRepo = class UserRepo extends typeorm_1.Repository {
         }
         return user;
     }
+    async get_user_by_user_id(email_address) {
+        let user = await this.findOne({
+            where: { email_address, account_type: (0, typeorm_1.Not)(user_model_1.ACCOUNT_TYPE.ADMIN) },
+        });
+        if (!user)
+            throw new UserNotFound();
+        return user;
+    }
     async update_user(user_id, payload) {
         const user = await this.findOne(user_id);
         if (!user)
@@ -53,6 +61,8 @@ let UserRepo = class UserRepo extends typeorm_1.Repository {
             user.last_name = payload.last_name;
         if (payload.email_address)
             user.email_address = payload.email_address;
+        if (payload.picture_url)
+            user.picture_url = payload.picture_url;
         return await this.save(user);
     }
     async find_or_create_user(params) {
@@ -105,11 +115,11 @@ let UserRepo = class UserRepo extends typeorm_1.Repository {
         FROM
           transactions
         WHERE
-          user_id = '${user.id}'
+          user_id = '${user.email_address}'
           AND status = '${transactions_1.TRANSACTION_STATUS.SUCCESSFUL}'
           AND native_amount IS NOT NULL)
       WHERE
-        id = '${user.id}';
+        id = '${user.email_address}';
 
     COMMIT;
     `);

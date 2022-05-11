@@ -53,6 +53,23 @@ let HopperRepo = class HopperRepo extends typeorm_1.Repository {
         hopper.status = status;
         return await this.save(hopper);
     }
+    async find_one_avaliable_hopper(hopper, status) {
+        const hopper_status_map = {
+            [hopper_model_1.HOPPER_STATUS.APPLIED]: {
+                [hopper_model_1.HOPPER_STATUS.DECLINED]: true,
+                [hopper_model_1.HOPPER_STATUS.IDLE]: true,
+            },
+            [hopper_model_1.HOPPER_STATUS.DECLINED]: {
+                [hopper_model_1.HOPPER_STATUS.APPLIED]: true,
+            },
+        };
+        const valid_move = hopper_status_map[hopper.status] &&
+            hopper_status_map[hopper.status][status];
+        if (!valid_move)
+            throw new InvalidHopperStatusMove();
+        hopper.status = status;
+        return await this.save(hopper);
+    }
 };
 HopperRepo = __decorate([
     (0, typeorm_1.EntityRepository)(hopper_model_1.Hopper)

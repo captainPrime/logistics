@@ -31,7 +31,7 @@ let BankdetailsController = class BankdetailsController {
         const user_in_session = req.user;
         const last_name = user_in_session.last_name;
         const first_name = user_in_session.first_name;
-        const user_id = user_in_session.id;
+        const user_id = "3939djd";
         const account_number = dto.account_number;
         const bank_code = dto.bank_code;
         const [success, bank] = await this.paystack.retrieveSingleBank(bank_code);
@@ -61,12 +61,12 @@ let BankdetailsController = class BankdetailsController {
         const result = await this.bankdetailRepo.add_bank_details(bankdetailsDTO);
         return { result };
     }
-    async update_transaction(req, user_id) {
+    async update_transaction(user_id) {
         try {
-            const bankdetail = await this.bankdetailRepo.find_bank_by_userid(user_id);
-            if (!bankdetail)
+            const bank_detail = await this.bankdetailRepo.find_bank_by_userid(user_id);
+            if (!bank_detail)
                 return;
-            return bankdetail;
+            return bank_detail;
         }
         catch (err) {
             if (err instanceof paystack_1.InvalidSignature) {
@@ -77,9 +77,9 @@ let BankdetailsController = class BankdetailsController {
     }
 };
 __decorate([
-    openapi.ApiOperation({ description: "Add Bank account details for withdrawal\n* @param dto" }),
+    openapi.ApiOperation({ description: "Add Bank account details for withdrawal\n* @param dto\n* @returns string" }),
     (0, common_1.UseGuards)(middlewares_1.AuthGuard),
-    (0, common_1.Post)('add_bank_account'),
+    (0, common_1.Post)('/add_bank_account'),
     openapi.ApiResponse({ status: 201, type: Object }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
@@ -88,18 +88,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BankdetailsController.prototype, "add_bank_details", null);
 __decorate([
-    (0, common_1.Get)('find_bankdetails/:user_id'),
+    openapi.ApiOperation({ description: "Fetch bank details" }),
+    (0, common_1.Get)('/find_bank_details/:user_id'),
     openapi.ApiResponse({ status: 200, type: [require("../../../bankdetails/bankdetail.model").Bankdetail] }),
-    __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Param)('user_id', new common_1.ParseUUIDPipe())),
+    __param(0, (0, common_1.Param)('user_id', new common_1.ParseUUIDPipe())),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BankdetailsController.prototype, "update_transaction", null);
 BankdetailsController = __decorate([
     (0, swagger_1.ApiTags)('Bankdetail'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
-    (0, common_1.Controller)('bankdetails'),
+    (0, common_1.Controller)('bank-details'),
     __metadata("design:paramtypes", [bankdetails_1.BankdetailRepo,
         paystack_1.PaystackService])
 ], BankdetailsController);

@@ -27,7 +27,7 @@ import { UnauthorizedRequest } from '@app/internal/errors';
 
 @ApiTags('Bankdetail')
  @ApiBearerAuth('access-token')
-@Controller('bankdetails')
+@Controller('bank-details')
 export class BankdetailsController {
   constructor(
     private readonly bankdetailRepo: BankdetailRepo,
@@ -38,9 +38,10 @@ export class BankdetailsController {
   /**
    * Add Bank account details for withdrawal
    *  * @param dto
+   *  * @returns string
    */
   @UseGuards(AuthGuard)
-  @Post('add_bank_account')
+  @Post('/add_bank_account')
   async add_bank_details(
     @Body() dto: AddBankdetailsDTO,
     @Req() req: Request,
@@ -50,7 +51,7 @@ export class BankdetailsController {
     const  user_in_session = req.user;
     const last_name = user_in_session.last_name;
     const first_name = user_in_session.first_name;
-    const user_id = user_in_session.id;
+    const user_id = "3939djd"//user_in_session.email_address;
     const account_number = dto.account_number;
     
     const bank_code = dto.bank_code;
@@ -100,19 +101,23 @@ export class BankdetailsController {
 
 
 
-
-  @Get('find_bankdetails/:user_id')
-  async update_transaction(@Req() req: Request,  @Param('user_id', new ParseUUIDPipe()) user_id: string,
+ /**
+   * Fetch bank details
+   * @param user_id
+   * @returns response of user bank details
+   */
+  @Get('/find_bank_details/:user_id')
+  async update_transaction(@Param('user_id', new ParseUUIDPipe()) user_id: string,
   ) {
     try {
      
-      const bankdetail =
+      const bank_detail =
         await this.bankdetailRepo.find_bank_by_userid(user_id);
-      if (!bankdetail) return;
+      if (!bank_detail) return;
 
     
      
-      return bankdetail;
+      return bank_detail;
     } catch (err) {
       if (err instanceof InvalidSignature) {
         throw new UnauthorizedRequest(

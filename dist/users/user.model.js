@@ -26,7 +26,7 @@ let User = class User extends model_1.Model {
             this.email_address = this.email_address.toLowerCase();
     }
     static _OPENAPI_METADATA_FACTORY() {
-        return { first_name: { required: false, type: () => String, description: "user's first name" }, last_name: { required: false, type: () => String, description: "user's last name" }, email_address: { required: false, type: () => String, description: "user's email address.\nemail address is tranaformed to lower case to avoid case sensitivity search" }, phone_number: { required: true, type: () => String, description: "user's phone number\nphone number must already be formated in +234 format" }, account_type: { required: true, description: "type of user", enum: require("./user.model").ACCOUNT_TYPE }, account_balance: { required: true, type: () => Number, description: "current account balance" }, hopper: { required: true, type: () => require("../hoppers/hopper.model").Hopper, description: "User relationships" }, orders: { required: true, type: () => [require("../orders/order.model").Order] } };
+        return { first_name: { required: false, type: () => String, description: "user's first name" }, last_name: { required: false, type: () => String, description: "user's last name" }, email_address: { required: false, type: () => String, description: "user's email address.\nemail address is tranaformed to lower case to avoid case sensitivity search" }, phone_number: { required: true, type: () => String, description: "user's phone number\nphone number must already be formated in +234 format" }, account_type: { required: true, description: "type of user", enum: require("./user.model").ACCOUNT_TYPE }, picture_url: { required: false, type: () => String, description: "user's profile picture url" }, account_balance: { required: true, type: () => Number, description: "current account balance" }, hopper: { required: true, type: () => require("../hoppers/hopper.model").Hopper, description: "User relationships" }, orders: { required: true, type: () => [require("../orders/order.model").Order] } };
     }
 };
 __decorate([
@@ -49,6 +49,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "account_type", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "picture_url", void 0);
 __decorate([
     (0, typeorm_1.Column)(Object.assign(Object.assign({}, db_1.numeric), { unsigned: true, default: 0.0 })),
     __metadata("design:type", Number)

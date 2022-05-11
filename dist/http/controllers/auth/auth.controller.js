@@ -40,7 +40,7 @@ let AuthController = class AuthController {
             throw new common_1.BadRequestException('The provided code is invalid');
         }
         const user = await this.userRepo.get_or_create_user_by_phone_number(phone_number);
-        const token = await this.sessions.create(user.id, user);
+        const token = await this.sessions.create(user.email_address, user);
         return { token, user };
     }
 };

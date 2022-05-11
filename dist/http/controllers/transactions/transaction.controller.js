@@ -32,12 +32,12 @@ let TransactionController = class TransactionController {
         this.emitter = emitter;
         this.hopperRepo = hopperRepo;
     }
-    async initialize_wallet_funding(body, req) {
-        const amount = body.amount;
+    async initialize_wallet_funding(dto, req) {
+        const amount = dto.amount;
         const user_in_session = req.user;
         const intent = transactions_1.TRANSACTION_INTENTS.WALLET_FUNDING;
         const metadata = {
-            user_id: user_in_session.id,
+            user_id: user_in_session.email_address,
             intent,
         };
         const { data } = await this.paystack.initialize_transaction(amount, JSON.stringify(metadata));
@@ -97,7 +97,7 @@ let TransactionController = class TransactionController {
             }
         }
     }
-    async hopper_withdrawal(hopper_id, dto, req) {
+    async hopper_withdrawal(hopper_id, dto) {
         try {
             const hopper = await this.hopperRepo.get_hopper(hopper_id);
             return await this.hopperRepo.update_hopper_status(hopper, dto.status);
@@ -163,7 +163,7 @@ let TransactionController = class TransactionController {
 __decorate([
     openapi.ApiOperation({ description: "Initializes a wallet funding process" }),
     (0, common_1.UseGuards)(middlewares_1.AuthGuard),
-    (0, common_1.Post)('wallet-funding'),
+    (0, common_1.Post)('/wallet_funding'),
     openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
@@ -172,7 +172,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TransactionController.prototype, "initialize_wallet_funding", null);
 __decorate([
-    (0, common_1.Post)('paystack-webhook'),
+    openapi.ApiOperation({ description: "paystack a webhook" }),
+    (0, common_1.Post)('/paystack_webhook'),
     openapi.ApiResponse({ status: 201, type: String }),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -180,6 +181,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TransactionController.prototype, "update_transaction", null);
 __decorate([
+    openapi.ApiOperation({ description: "Fetch transactions by transaction ID" }),
     (0, common_1.Get)('/:transaction_id'),
     openapi.ApiResponse({ status: 200, type: require("../../../transactions/transaction.model").Transaction }),
     __param(0, (0, common_1.Param)('transaction_id', new common_1.ParseUUIDPipe())),
@@ -189,18 +191,17 @@ __decorate([
 ], TransactionController.prototype, "get_transaction", null);
 __decorate([
     openapi.ApiOperation({ description: "Creates Hopper Withdrawal" }),
-    (0, common_1.Post)('hoppers/:hopper_id/withdraw'),
+    (0, common_1.Post)('/hoppers/:hopper_id/withdraw'),
     openapi.ApiResponse({ status: 201, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Param)('hopper_id')),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, hopper_validator_1.UpdateHopperDTO, Object]),
+    __metadata("design:paramtypes", [String, hopper_validator_1.UpdateHopperDTO]),
     __metadata("design:returntype", Promise)
 ], TransactionController.prototype, "hopper_withdrawal", null);
 __decorate([
     openapi.ApiOperation({ description: "Admin Withdrawal" }),
-    (0, common_1.Post)('admin/:admin_id/withdraw'),
+    (0, common_1.Post)('/admin/:admin_id/withdraw'),
     openapi.ApiResponse({ status: 201, type: require("../../../hoppers/hopper.model").Hopper }),
     __param(0, (0, common_1.Param)('admin_id')),
     __param(1, (0, common_1.Body)()),
@@ -210,7 +211,7 @@ __decorate([
 ], TransactionController.prototype, "admin_withdrawal", null);
 __decorate([
     openapi.ApiOperation({ description: "Price Determination algorithm" }),
-    (0, common_1.Post)('hoppers/:hopper_id/price'),
+    (0, common_1.Post)('/hoppers/:hopper_id/price'),
     openapi.ApiResponse({ status: 201, type: String }),
     __param(0, (0, common_1.Param)('hopper_id')),
     __param(1, (0, common_1.Body)()),

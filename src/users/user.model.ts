@@ -40,6 +40,11 @@ export class User extends Model {
   account_type: ACCOUNT_TYPE;
 
   /**
+   * user's profile picture url
+   */
+   @Column({ nullable: true })
+  picture_url?: string;
+  /**
    * current account balance
    */
   @Column({

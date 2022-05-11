@@ -13,5 +13,5 @@ export declare class BankdetailsController {
         result: import("@app/bankdetails").Bankdetail;
         message?: undefined;
     }>;
-    update_transaction(req: Request, user_id: string): Promise<import("@app/bankdetails").Bankdetail[]>;
+    update_transaction(user_id: string): Promise<import("@app/bankdetails").Bankdetail[]>;
 }

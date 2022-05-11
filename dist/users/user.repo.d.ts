@@ -4,6 +4,7 @@ import { UpdateUserDTO, UserDTO } from '@app/http/controllers/users/user.validat
 export declare class UserRepo extends Repository<User> {
     create_user(user_data: UserDTO): Promise<User>;
     get_or_create_user_by_phone_number(phone_number: string): Promise<User>;
+    get_user_by_user_id(email_address: string): Promise<User>;
     update_user(user_id: string, payload: UpdateUserDTO): Promise<User>;
     find_or_create_user(params: FindUser): Promise<User>;
     update_user_balance(user: User): Promise<any>;
