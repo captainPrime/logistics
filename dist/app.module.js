@@ -72,10 +72,11 @@ AppModule = __decorate([
                     url: configService.get(env_keys_1.Env.database_url),
                     entities: ['dist/**/*.model{.ts,.js}'],
                     autoLoadEntities: true,
+                    ssl: true,
                     logging: false,
-                    ssl: {
+                    /* ssl: {
                         rejectUnauthorized: false
-                      } 
+                      }  */
                 }),
                 inject: [config_1.ConfigService],
             }),
