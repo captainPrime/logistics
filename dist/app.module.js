@@ -74,7 +74,7 @@ AppModule = __decorate([
                     autoLoadEntities: true,
                     logging: false,
                     ssl: {
-                        rejectUnauthorized: false
+                        rejectUnauthorized: true
                       }
                 }),
                 inject: [config_1.ConfigService],
