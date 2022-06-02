@@ -75,7 +75,7 @@ AppModule = __decorate([
                     logging: false,
                     ssl: {
                         rejectUnauthorized: false
-                      }
+                      } 
                 }),
                 inject: [config_1.ConfigService],
             }),
