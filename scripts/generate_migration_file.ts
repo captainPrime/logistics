@@ -13,6 +13,7 @@ const config = {
   cli: {
     migrationsDir: 'db/migrations',
   },
+  
 };
 
 const filePath = path.join(process.cwd(), 'ormconfig.json');

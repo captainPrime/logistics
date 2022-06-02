@@ -73,6 +73,9 @@ AppModule = __decorate([
                     entities: ['dist/**/*.model{.ts,.js}'],
                     autoLoadEntities: true,
                     logging: false,
+                    ssl: {
+                        rejectUnauthorized: false
+                      }
                 }),
                 inject: [config_1.ConfigService],
             }),
