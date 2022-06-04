@@ -1,1 +1,1 @@
-worker: ./run_server
+web: ./run_server
