@@ -38,7 +38,7 @@ async function bootstrap() {
     SwaggerModule.setup('api-spec', app, document);
   }
 
-  await app.listen(PORT);
+  await app.listen(PORT || 5000);
   Logger.log(`Application running on ${await app.getUrl()}`, 'Application');
 }
 
