@@ -30,7 +30,8 @@ async function bootstrap() {
         const document = swagger_1.SwaggerModule.createDocument(app, swaggerConfig);
         swagger_1.SwaggerModule.setup('api-spec', app, document);
     }
-    await app.listen(PORT);
+    const host = '0.0.0.0';
+    await app.listen(PORT, host);
     common_1.Logger.log(`Application running on ${await app.getUrl()}`, 'Application');
 }
 bootstrap();
